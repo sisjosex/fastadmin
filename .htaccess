@@ -1,0 +1,6 @@
+DirectoryIndex index.html index.php
+
+RewriteEngine on
+RewriteCond $1 !^(index.php|assets|uploads|helpers|secureimage|css|fonts|img|js|rs-plugin|sass)
+RewriteRule ^(.*)$ router.php
+
