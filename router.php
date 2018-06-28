@@ -18,15 +18,13 @@ if($port != '80') {
     $port = '';
 }
 
-$path = $protocol . ':' . '//' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['REQUEST_URI'];
+$path = str_replace($uri, '', $_SERVER['REQUEST_URI']);
 
 $request = explode(BASE_URL, $path);
 
 $request = explode('?', count($request) == 2 ? $request[1] : $request[0]);
 
 $request = explode('/', $request[0]);
-
-
 
 $controller = DEFAULT_CONTROLLER;
 $function = DEFAULT_FUNCTION;

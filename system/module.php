@@ -4,7 +4,6 @@ require_once(BASE_PATH . 'system/model.php');
 
 class Module extends Model
 {
-
     /*
      * Fields format:
      */
@@ -45,7 +44,7 @@ class Module extends Model
     var $base_url = 'admin/';
     var $name = '';
 
-    function __construct($table, $id, $field='name')
+    function __construct($table, $id, $field = 'name')
     {
         parent::__construct($table, $id, $field);
 
@@ -53,7 +52,7 @@ class Module extends Model
         $this->field_custom_name = '';
         $this->field_id = $id;
 
-        $this->url_add  = $table . '/getNew';
+        $this->url_add = $table . '/getNew';
         $this->url_edit = $table . '/getOne';
         $this->url_save = $table . '/save';
         $this->url_save_all = $table . '/saveAll';
@@ -63,10 +62,11 @@ class Module extends Model
         $this->phisical_table = $table;
     }
 
-    function purgeModel($level=200) {
+    function purgeModel($level = 200)
+    {
 
         $result = array(
-            'fields' => $this->purgeFields($this->fields, $level -1),
+            'fields' => $this->purgeFields($this->fields, $level - 1),
             'field_group' => $this->field_group,
             'name' => $this->name,
             'table_id' => $this->field_id,
@@ -78,63 +78,61 @@ class Module extends Model
         return $result;
     }
 
-    function purgeFields($fields, $level = 100) {
+    function purgeFields($fields, $level = 100)
+    {
+        foreach ($fields as $key => $field) {
+            if (isset($fields[$key]['model']) || @$fields[$key]['type'] == 'composite') {
 
-        if($level > 0) {
-            foreach ($fields as $key => $field) {
-                if (isset($fields[$key]['model']) || @$fields[$key]['type'] == 'composite') {
+                if (isset($fields[$key]['model'])) {
 
-                    if (isset($fields[$key]['model'])) {
+                    $model = $fields[$key]['model'];
+                    $fields[$key]['model'] = $model->name;
 
-                        $model = $fields[$key]['model'];
-                        $fields[$key]['model'] = $model->purgeModel($level);
+                } else if ($fields[$key]['type'] == 'composite') {
 
-                    } else if ($fields[$key]['type'] == 'composite') {
+                    $model = $fields[$key]['composite']['external_model'];
 
-                        $model = $fields[$key]['composite']['external_model'];
-
-                        $fields[$key]['composite']['external_model'] = $model->purgeModel($level);
-                    }
+                    $fields[$key]['composite']['external_model'] = $model->name;
                 }
-
-                $fields[$key] = $this->purgeField($fields[$key], $level - 1);
             }
         }
 
         return $fields;
     }
 
-    function purgeField($field) {
+    function purgeField($field)
+    {
 
         unset($field['comparator']);
 
         return $field;
     }
 
-    function addField($field) {
+    function addField($field)
+    {
 
-        if( isset($field['id']) ) {
+        if (isset($field['id'])) {
 
-            $this->fields[ $field['id'] ] = $field;
+            $this->fields[$field['id']] = $field;
 
-        } else if( isset($field['key']) ) {
+        } else if (isset($field['key'])) {
 
-            $this->fields[ $field['key'] ] = $field;
+            $this->fields[$field['key']] = $field;
 
-        } else if( isset($field['grid_key']) ) {
+        } else if (isset($field['grid_key'])) {
 
-            $this->fields[ $field['grid_key'] ] = $field;
+            $this->fields[$field['grid_key']] = $field;
 
-        } else if( isset($field['form_key']) ) {
+        } else if (isset($field['form_key'])) {
 
-            $this->fields[ $field['form_key'] ] = $field;
+            $this->fields[$field['form_key']] = $field;
         }
 
-        if( isset($field['values']) ) {
+        if (isset($field['values'])) {
 
             $values_array = array();
 
-            foreach($field['values'] as $value) {
+            foreach ($field['values'] as $value) {
                 $values_array[$value['id']] = $value['name'];
             }
 
@@ -148,7 +146,8 @@ class Module extends Model
         $this->field_group[$group] = $fields;
     }
 
-    function getListDropdown($default = array()) {
+    function getListDropdown($default = array())
+    {
 
         $columns = array_keys($this->fields);
 
@@ -160,7 +159,7 @@ class Module extends Model
 
         $joins = array();
 
-        if( !empty($this->joins) ) {
+        if (!empty($this->joins)) {
 
             $joins = $this->joins;
         }
@@ -169,7 +168,7 @@ class Module extends Model
 
             $field = $this->fields[$column];
 
-            if(isset($field['field'])) {
+            if (isset($field['field'])) {
                 //$field = $this->fields[$field['field']];
             }
 
@@ -187,7 +186,7 @@ class Module extends Model
 
                 } else {
 
-                    $relations[$external_model->phisical_table] ++;
+                    $relations[$external_model->phisical_table]++;
                 }
 
                 $columns_query[] = $external_model->phisical_table . $relations[$external_model->phisical_table] . "." . $external_model->field_id . " as " . $external_model->phisical_table . $relations[$external_model->phisical_table] . "_id";
@@ -204,11 +203,11 @@ class Module extends Model
 
             } else {
 
-                if( isset($field['type']) && $field['type'] != 'composite' && $field['type'] != 'inline' && $field['type'] != 'map' && $field['type'] != 'dropdown' ) {
+                if (isset($field['type']) && $field['type'] != 'composite' && $field['type'] != 'inline' && $field['type'] != 'map' && $field['type'] != 'dropdown') {
 
                     $columns_query[] = $this->phisical_table . "." . $column;
 
-                } else if(isset($field['type']) && $field['type'] != 'composite' && $field['type'] != 'inline' && $field['type'] != 'map') {
+                } else if (isset($field['type']) && $field['type'] != 'composite' && $field['type'] != 'inline' && $field['type'] != 'map') {
 
                     $columns_query[] = $this->phisical_table . "." . $column;
                 }
@@ -216,9 +215,9 @@ class Module extends Model
         }
 
 
-        $sql = "SELECT `" .  $this->phisical_table . "`.`{$this->field_id}` as id, ".
+        $sql = "SELECT `" . $this->phisical_table . "`.`{$this->field_id}` as id, " .
             ($this->field_custom_name_dropdown ? $this->field_custom_name_dropdown . ' as name' : $this->phisical_table . '.' . $this->field_name . ' as name')
-            ." FROM " . $this->phisical_table . "
+            . " FROM " . $this->phisical_table . "
          " . implode(' ', $joins) . " ";
 
         if (!empty($this->filters)) {
@@ -228,16 +227,16 @@ class Module extends Model
 
                 $field = isset($this->fields[$key]) ? $this->fields[$key] : FALSE;
 
-                if( is_array($value) ) {
+                if (is_array($value)) {
 
                     $values = array();
-                    foreach($value as $valtmp) {
-                        $values[] = "'" . $valtmp ."'";
+                    foreach ($value as $valtmp) {
+                        $values[] = "'" . $valtmp . "'";
                     }
 
                     $filter_fields[] = $key . " IN(" . implode(',', $values) . ")";
 
-                } else if ($field && isset($field['comparator']) && $field['comparator']=='IN') {
+                } else if ($field && isset($field['comparator']) && $field['comparator'] == 'IN') {
 
                     $filter_fields[] = $key . " " . $field['comparator'] . " " . $value . "";
 
@@ -245,7 +244,7 @@ class Module extends Model
 
                     $filter_fields[] = $key . " " . $field['comparator'] . " '" . addslashes($value) . "'";
 
-                } else if($field) {
+                } else if ($field) {
 
                     $filter_fields[] = $key . " LIKE '%" . addslashes($value) . "%'";
 
@@ -280,7 +279,7 @@ class Module extends Model
 
     function getList($count_only = FALSE, $row_only = FALSE)
     {
-        if( isset( $this->field_group['custom_grid'] ) ) {
+        if (isset($this->field_group['custom_grid'])) {
 
             $columns = $this->field_group['custom_grid'];
 
@@ -298,90 +297,88 @@ class Module extends Model
 
         $joins = array();
 
-        if( !empty($this->joins) ) {
+        if (!empty($this->joins)) {
 
             $joins = $this->joins;
         }
 
-        if ( !$count_only ) {
+        if (!$count_only) {
             //$joins = $this->joins;
         }
 
         //$joins = array();
 
 
+        foreach ($columns as $column) {
 
-            foreach ($columns as $column) {
+            $field = @$this->fields[$column];
 
-                $field = @$this->fields[$column];
+            if (isset($field['field'])) {
+                $field = $this->fields[$field['field']];
+            }
 
-                if(isset($field['field'])) {
-                    $field = $this->fields[$field['field']];
-                }
+            if (isset($field['operation'])) {
 
-                if (isset($field['operation'])) {
+                $columns_query[] = "" . $field['operation'] . " as " . $column;
 
-                    $columns_query[] = "" . $field['operation'] . " as " . $column;
+            } else if (isset($field['model']) && @$field['type'] != 'inline') {
 
-                } else if (isset($field['model']) && @$field['type'] != 'inline') {
+                $external_model = $field['model'];
 
-                    $external_model = $field['model'];
+                if (!isset($relations[$external_model->phisical_table])) {
 
-                    if (!isset($relations[$external_model->phisical_table])) {
+                    $relations[$external_model->phisical_table] = '';
 
-                        $relations[$external_model->phisical_table] = '';
-
-                        if($this->phisical_table == $external_model->phisical_table) {
-                            $relations[$external_model->phisical_table] ++;
-                        }
-
-                    } else {
-
-                        $relations[$external_model->phisical_table] ++;
+                    if ($this->phisical_table == $external_model->phisical_table) {
+                        $relations[$external_model->phisical_table]++;
                     }
-
-                    $columns_query[] = "`".$external_model->phisical_table . $relations[$external_model->phisical_table] . "`.`" . $external_model->field_id . "` as " . $external_model->phisical_table . $relations[$external_model->phisical_table] . "_id";
-
-                    $columns_query[] = "".($external_model->field_custom_name ? $external_model->field_custom_name . ' as ' . $external_model->phisical_table . $relations[$external_model->phisical_table] : $external_model->phisical_table . $relations[$external_model->phisical_table] . "." . $external_model->field_name . " as " . $external_model->phisical_table . $relations[$external_model->phisical_table]);
-
-                    //$columns_query[] = $external_model->phisical_table . $relations[$external_model->phisical_table] . "." . $external_model->field_name . " as " . $external_model->phisical_table . $relations[$external_model->phisical_table];
-
-                    $joins[] = (isset($field['relation_type']) ? $field['relation_type'] : 'LEFT') . " JOIN " .
-                        $external_model->phisical_table . " " . $external_model->phisical_table . $relations[$external_model->phisical_table] .
-                        " ON (`" . $external_model->phisical_table . $relations[$external_model->phisical_table] . '`.`' . $external_model->field_id .
-                        "`=" .
-                        $this->phisical_table . "." . $field['key'] . ") ";
 
                 } else {
 
-                    if( isset($field['type']) && $field['type'] != 'composite' && $field['type'] != 'inline' && $field['type'] != 'map' && $field['type'] != 'dropdown' ) {
+                    $relations[$external_model->phisical_table]++;
+                }
 
-                        $columns_query[] = $this->phisical_table . "." . $column;
+                $columns_query[] = "`" . $external_model->phisical_table . $relations[$external_model->phisical_table] . "`.`" . $external_model->field_id . "` as " . $external_model->phisical_table . $relations[$external_model->phisical_table] . "_id";
 
-                    } else if(isset($field['type']) && $field['type'] != 'composite' && $field['type'] != 'inline' && $field['type'] != 'map') {
+                $columns_query[] = "" . ($external_model->field_custom_name ? $external_model->field_custom_name . ' as ' . $external_model->phisical_table . $relations[$external_model->phisical_table] : $external_model->phisical_table . $relations[$external_model->phisical_table] . "." . $external_model->field_name . " as " . $external_model->phisical_table . $relations[$external_model->phisical_table]);
 
-                        $columns_query[] = $this->phisical_table . "." . $column;
-                    }
+                //$columns_query[] = $external_model->phisical_table . $relations[$external_model->phisical_table] . "." . $external_model->field_name . " as " . $external_model->phisical_table . $relations[$external_model->phisical_table];
+
+                $joins[] = (isset($field['relation_type']) ? $field['relation_type'] : 'LEFT') . " JOIN " .
+                    $external_model->phisical_table . " " . $external_model->phisical_table . $relations[$external_model->phisical_table] .
+                    " ON (`" . $external_model->phisical_table . $relations[$external_model->phisical_table] . '`.`' . $external_model->field_id .
+                    "`=" .
+                    $this->phisical_table . "." . $field['key'] . ") ";
+
+            } else {
+
+                if (isset($field['type']) && $field['type'] != 'composite' && $field['type'] != 'inline' && $field['type'] != 'map' && $field['type'] != 'dropdown') {
+
+                    $columns_query[] = $this->phisical_table . "." . $column;
+
+                } else if (isset($field['type']) && $field['type'] != 'composite' && $field['type'] != 'inline' && $field['type'] != 'map') {
+
+                    $columns_query[] = $this->phisical_table . "." . $column;
                 }
             }
+        }
 
 
-        if ( $count_only ) {
+        if ($count_only) {
             $columns_query = array();
             $columns_query[] = " COUNT(`" . $this->phisical_table . "`.`" . $this->field_id . "`) as total ";
         }
 
 
-	
-        if( !empty($this->joins) && !$count_only ) {
-            foreach($this->joins as $join) {
+        if (!empty($this->joins) && !$count_only) {
+            foreach ($this->joins as $join) {
                 $joins[] = $join;
             }
 
         }
 
-        if( !empty($this->post_joins) && !$count_only ) {
-            foreach($this->post_joins as $join) {
+        if (!empty($this->post_joins) && !$count_only) {
+            foreach ($this->post_joins as $join) {
                 $joins[] = $join;
             }
         }
@@ -398,16 +395,16 @@ class Module extends Model
 
                 $field = isset($this->fields[$key]) ? $this->fields[$key] : FALSE;
 
-                if( is_array($value) ) {
+                if (is_array($value)) {
 
                     $values = array();
-                    foreach($value as $valtmp) {
-                        $values[] = "'" . $valtmp ."'";
+                    foreach ($value as $valtmp) {
+                        $values[] = "'" . $valtmp . "'";
                     }
 
                     $filter_fields[] = $key . " IN(" . implode(',', $values) . ")";
 
-                } else if (trim($value) && $field && isset($field['comparator']) && $field['comparator']=='IN') {
+                } else if (trim($value) && $field && isset($field['comparator']) && $field['comparator'] == 'IN') {
 
                     $filter_fields[] = $key . " " . $field['comparator'] . " " . $value . "";
 
@@ -415,15 +412,15 @@ class Module extends Model
 
                     $filter_fields[] = $key . " " . $field['comparator'] . " '" . addslashes($value) . "'";
 
-                } else if(trim($value) && $field) {
+                } else if (trim($value) && $field) {
 
                     $filter_fields[] = $key . " LIKE '%" . addslashes($value) . "%'";
 
-                } else if(trim($value) && trim($key) ) {
+                } else if (trim($value) && trim($key)) {
 
                     $filter_fields[] = $key . "'" . addslashes($value) . "'";
 
-                } else if( trim($value) ) {
+                } else if (trim($value)) {
 
                     $filter_fields[] = ($value);
                 }
@@ -436,22 +433,22 @@ class Module extends Model
         }
 
         $filter_fields2 = array();
-        if ( isset($_REQUEST['filters']) ) {
+        if (isset($_REQUEST['filters'])) {
 
-            foreach($_REQUEST['filters'] as $key => $val) {
+            foreach ($_REQUEST['filters'] as $key => $val) {
 
-                $key = str_replace($this->name.'_', $this->phisical_table.'.', $key);
+                $key = str_replace($this->name . '_', $this->phisical_table . '.', $key);
                 $key = str_replace($this->name, $this->phisical_table, $key);
 
                 $filter_fields2[] = $key . " LIKE '%" . addslashes($val) . "%'";
             }
         }
 
-        if( !empty($filter_fields) && !empty($filter_fields2) ) {
+        if (!empty($filter_fields) && !empty($filter_fields2)) {
 
             $sql .= " AND " . implode(' AND ', $filter_fields2);
 
-        } else if(!empty($filter_fields2)) {
+        } else if (!empty($filter_fields2)) {
 
             $sql .= " WHERE " . implode(' AND ', $filter_fields2);
         }
@@ -470,11 +467,11 @@ class Module extends Model
             }
         }
 
-        if((!empty($this->group_by) && !$count_only) || (!empty($this->group_by) && $count_only && empty($this->joins))) {
+        if ((!empty($this->group_by) && !$count_only) || (!empty($this->group_by) && $count_only && empty($this->joins))) {
             $sql .= " GROUP BY " . implode($this->group_by);
         }
 
-        if ( isset($_REQUEST['per_page']) && isset($_REQUEST['current_page']) ) {
+        if (isset($_REQUEST['per_page']) && isset($_REQUEST['current_page'])) {
 
             $this->pagination['start'] = ($_REQUEST['current_page'] - 1) * $_REQUEST['per_page'];
             $this->pagination['limit'] = $_REQUEST['per_page'];
@@ -492,31 +489,32 @@ class Module extends Model
             return $row['total'];
         }
 
-        if(!$row_only) {
+        if (!$row_only) {
 
             $result = $this->fetch_result($sql);
 
         } else {
 
-            return $this->format_row( $this->fetch_row($sql) );
+            return $this->format_row($this->fetch_row($sql));
         }
 
         $result_list = array();
-        if($result)
-        foreach($result as $row) {
-            $result_list['r_' . $row[$this->field_id]] = $this->format_row($row);
-        }
+        if ($result)
+            foreach ($result as $row) {
+                $result_list['r_' . $row[$this->field_id]] = $this->format_row($row);
+            }
 
         return $result_list;
     }
 
-    function format_row($row) {
+    function format_row($row)
+    {
 
-        if(!$row) {
+        if (!$row) {
             return FALSE;
         }
 
-        foreach($row as $key => &$val) {
+        foreach ($row as $key => &$val) {
 
             $val = $this->formatField($key, $val, 'grid', $row);
         }
@@ -525,7 +523,8 @@ class Module extends Model
         return $row;
     }
 
-    function loadDepends() {
+    function loadDepends()
+    {
         $key = $_REQUEST['key'];
         //$id = $_REQUEST[$this->phisical_table][$this->field_id];
         $data = $_REQUEST[$this->phisical_table];
@@ -537,13 +536,13 @@ class Module extends Model
         );
 
         $firstTime = true;
-        foreach($depending as $column) {
+        foreach ($depending as $column) {
 
             $field = $this->fields[$column];
 
-            if( $field['type'] == 'composite' || $field['type'] == 'dropdown' || isset($field['depends_of']) ) {
+            if ($field['type'] == 'composite' || $field['type'] == 'dropdown' || isset($field['depends_of'])) {
 
-                if($firstTime || isset($field['depends_of']) ) {
+                if ($firstTime || isset($field['depends_of'])) {
 
                     $result = $this->getCustomDropDown('depends', $field, $data, $response);
                     $firstTime = false;
@@ -554,7 +553,7 @@ class Module extends Model
                 }
 
 
-                if($result && ($field['type'] == 'composite' || $field['type'] == 'dropdown') )  {
+                if ($result && ($field['type'] == 'composite' || $field['type'] == 'dropdown')) {
 
                     $response[$this->phisical_table][$column] = '';
 
@@ -572,15 +571,16 @@ class Module extends Model
         return $response;
     }
 
-    function loadDependsToolbar() {
+    function loadDependsToolbar()
+    {
 
         $key = str_replace('.', '', $_REQUEST['key']);
 
         $data = array();
-        foreach($_REQUEST as $key_ => $row) {
+        foreach ($_REQUEST as $key_ => $row) {
 
-            if(strpos($key_, $this->name) !== false) {
-                $data[str_replace(']', '', str_replace('[', '', str_replace($this->name.'_', '', $key_)))] = $row;
+            if (strpos($key_, $this->name) !== false) {
+                $data[str_replace(']', '', str_replace('[', '', str_replace($this->name . '_', '', $key_)))] = $row;
             }
         }
         $depending = $this->fields[$key]['key_depending'];
@@ -590,13 +590,13 @@ class Module extends Model
         );
 
         $firstTime = true;
-        foreach($depending as $column) {
+        foreach ($depending as $column) {
 
             $field = $this->fields[$column];
 
-            if( $field['type'] == 'composite' || $field['type'] == 'dropdown' || isset($field['depends_of']) ) {
+            if ($field['type'] == 'composite' || $field['type'] == 'dropdown' || isset($field['depends_of'])) {
 
-                if($firstTime || isset($field['depends_of']) ) {
+                if ($firstTime || isset($field['depends_of'])) {
 
                     $result = $this->getCustomDropDown('depends', $field, $data, $response);
                     $firstTime = false;
@@ -607,7 +607,7 @@ class Module extends Model
                 }
 
 
-                if($result && ($field['type'] == 'composite' || $field['type'] == 'dropdown') )  {
+                if ($result && ($field['type'] == 'composite' || $field['type'] == 'dropdown')) {
 
                     $response[$this->name][$column] = '';
 
@@ -625,7 +625,8 @@ class Module extends Model
         return $response;
     }
 
-    function getCustomDropDown($action, $field, $data, $response) {
+    function getCustomDropDown($action, $field, $data, $response)
+    {
 
         return FALSE;
     }
@@ -640,12 +641,12 @@ class Module extends Model
 
             $field = isset($this->fields[$column]) ? $this->fields[$column] : FALSE;
 
-            if(!$field) {
+            if (!$field) {
                 continue;
             }
 
 
-            if(isset($_REQUEST['key']) && $_REQUEST['key'] != $column) {
+            if (isset($_REQUEST['key']) && $_REQUEST['key'] != $column) {
                 continue;
             }
 
@@ -653,23 +654,23 @@ class Module extends Model
 
             $data[$this->name][$field_id] = '';
 
-            if( isset($field['value']) ) {
+            if (isset($field['value'])) {
 
                 $data[$this->name][$field_id] = $field['value'];
 
-            } else if(@$field['type'] == 'dropdown' || @$field['type'] == 'multiple' || @$field['type'] == 'composite') {
+            } else if (@$field['type'] == 'dropdown' || @$field['type'] == 'multiple' || @$field['type'] == 'composite') {
 
-                if( isset($field['values']) ) {
+                if (isset($field['values'])) {
 
                     $data[$this->name]['dropdown'][$field_id] = $field['values'];
 
                 } else {
 
-                    if( $field['type'] == 'dropdown' || $field['type'] == 'multiple' ) {
+                    if ($field['type'] == 'dropdown' || $field['type'] == 'multiple') {
 
                         $custom = $this->getCustomDropDown('new', $field, $data, $data);
 
-                        if( $custom ) {
+                        if ($custom) {
 
                             $data[$this->name]['dropdown'][$field_id] = $custom === true ? array() : $custom;
 
@@ -677,10 +678,10 @@ class Module extends Model
 
                             $model = $field['model'];
 
-                            $data[$this->name]['dropdown'][$field_id] = $model->getListDropdown( @$field['default'] );
+                            $data[$this->name]['dropdown'][$field_id] = $model->getListDropdown(@$field['default']);
                         }
 
-                    } else if( $field['type'] == 'composite' ) {
+                    } else if ($field['type'] == 'composite') {
 
                         $composite = $field['composite'];
 
@@ -688,7 +689,7 @@ class Module extends Model
 
                         $custom = $this->getCustomDropDown('new', $field, $data, $data);
 
-                        if( $custom ) {
+                        if ($custom) {
 
                             $data[$this->name]['dropdown'][$field_id] = $custom === true ? array() : $custom;
 
@@ -696,7 +697,7 @@ class Module extends Model
 
                             $result = $this->getCompositeDropdown($field, $data);
 
-                            if(!$result) {
+                            if (!$result) {
 
                                 $field_name = $external_model->field_custom_name_dropdown ? $external_model->field_custom_name_dropdown . ' as name ' : $external_model->phisical_table . '.' . $external_model->table_field . " as name ";
 
@@ -715,17 +716,17 @@ class Module extends Model
 					    GROUP BY `{$external_model->phisical_table}`.`{$external_model->field_id}`
                                             ";
 
-                                if(!empty($external_model->sorting)) {
+                                if (!empty($external_model->sorting)) {
                                     $sorting = array();
-                                    foreach($external_model->sorting as $key => $val) {
+                                    foreach ($external_model->sorting as $key => $val) {
                                         $sorting[] = "$key $val";
                                     }
-                                    if(!empty($sorting)) {
+                                    if (!empty($sorting)) {
                                         $sql .= "ORDER BY " . implode(',', $sorting);
                                     }
                                 }
 
-                                $result = $this->fetch_result( $sql, @$field['default'] );
+                                $result = $this->fetch_result($sql, @$field['default']);
 
                                 $data[$this->name]['dropdown'][$field_id] = $result;
 
@@ -737,7 +738,7 @@ class Module extends Model
                     }
                 }
 
-            } else if(@$field['type'] == 'map') {
+            } else if (@$field['type'] == 'map') {
 
                 $data[$this->name][$field_id] = array(
                     'latitude' => $field['settings']['center']['latitude'],
@@ -753,7 +754,8 @@ class Module extends Model
         return $data;
     }
 
-    function getEdit() {
+    function getEdit()
+    {
 
         $columns = $this->field_group['form'];
 
@@ -763,11 +765,11 @@ class Module extends Model
 
         $data = $this->callback_before_edit($id, $data);
 
-        if($data) {
+        if ($data) {
 
             $response = array();
 
-            foreach($columns as $column) {
+            foreach ($columns as $column) {
 
                 $value = isset($data[$column]) ? $data[$column] : '';
 
@@ -775,27 +777,27 @@ class Module extends Model
 
                 $response[$this->name][$column] = $value;
 
-                if( isset($this->fields[$column]) ) {
+                if (isset($this->fields[$column])) {
 
                     $field = $this->fields[$column];
 
-		    if(isset($field['grid_key'])) continue;
+                    if (isset($field['grid_key'])) continue;
 
                     $field_id = isset($field['id']) ? $field['id'] : $field['key'];
 
-                    if( @$field['type'] == 'dropdown' || @$field['type'] == 'multiple' || @$field['type'] == 'composite' || @$field['type'] == 'inline' ) {
+                    if (@$field['type'] == 'dropdown' || @$field['type'] == 'multiple' || @$field['type'] == 'composite' || @$field['type'] == 'inline') {
 
-                        if( isset($field['values']) ) {
+                        if (isset($field['values'])) {
 
                             $response[$this->name]['dropdown'][$column] = $field['values'];
 
                         } else {
 
-                            if( $field['type'] == 'dropdown' || $field['type'] == 'multiple' ) {
+                            if ($field['type'] == 'dropdown' || $field['type'] == 'multiple') {
 
                                 $custom = $this->getCustomDropDown('edit', $field, $data, $data);
 
-                                if( $custom ) {
+                                if ($custom) {
 
                                     $response[$this->name]['dropdown'][$field_id] = $custom === true ? array() : $custom;
 
@@ -803,10 +805,10 @@ class Module extends Model
 
                                     $model = $field['model'];
 
-                                    $response[$this->name]['dropdown'][$column] = $model->getListDropdown( @$field['default'] );
+                                    $response[$this->name]['dropdown'][$column] = $model->getListDropdown(@$field['default']);
                                 }
 
-                            } else if( $field['type'] == 'composite' ) {
+                            } else if ($field['type'] == 'composite') {
 
                                 $composite = $field['composite'];
 
@@ -814,7 +816,7 @@ class Module extends Model
 
                                 $custom = $this->getCustomDropDown('edit', $field, $data, $data);
 
-                                if( $custom ) {
+                                if ($custom) {
 
                                     $response[$this->name]['dropdown'][$field_id] = $custom === true ? array() : $custom;
 
@@ -822,7 +824,7 @@ class Module extends Model
 
                                     $custom = $this->getCompositeDropdown($field, $data);
 
-                                    if(!$custom) {
+                                    if (!$custom) {
 
                                         $field_name = $external_model->field_custom_name_dropdown ? $external_model->field_custom_name_dropdown . ' as name ' : $external_model->phisical_table . '.' . $external_model->table_field . " as name ";
 
@@ -844,15 +846,15 @@ class Module extends Model
                                                 /*WHERE `{$external_model->phisical_table}`.status != 'deleted'*/
                                                 ";
 
-                                        if(!empty($external_model->sorting)) {
+                                        if (!empty($external_model->sorting)) {
                                             $sorting = array();
-                                            foreach($external_model->sorting as $key => $val) {
+                                            foreach ($external_model->sorting as $key => $val) {
                                                 $sorting[] = "$key $val";
                                             }
                                             $sql .= "ORDER BY " . implode(',', $sorting);
                                         }
 
-                                        $response[$this->name]['dropdown'][$field_id] = $this->fetch_result( $sql, @$field['default'] );
+                                        $response[$this->name]['dropdown'][$field_id] = $this->fetch_result($sql, @$field['default']);
 
                                     } else {
 
@@ -860,11 +862,11 @@ class Module extends Model
                                     }
                                 }
 
-                            } else if( $field['type'] == 'inline' ) {
+                            } else if ($field['type'] == 'inline') {
 
                                 $external_model = $field['model'];
 
-                                $external_model->filters = array($external_model->phisical_table . '.' . $this->phisical_table.'_id=' => $id);
+                                $external_model->filters = array($external_model->phisical_table . '.' . $this->phisical_table . '_id=' => $id);
 
                                 $result = $external_model->getList();
 
@@ -872,7 +874,7 @@ class Module extends Model
                             }
                         }
 
-                    } else if(@$field['type'] == 'map') {
+                    } else if (@$field['type'] == 'map') {
 
                         $response[$this->name][$column] = array(
                             'latitude' => $data[$field['settings']['lat_key']],
@@ -889,24 +891,25 @@ class Module extends Model
         return FALSE;
     }
 
-    function save($data = FALSE) {
+    function save($data = FALSE)
+    {
 
         $data = !$data ? $_REQUEST[$this->name] : $data;
 
         $columns = $this->field_group['form'];
 
-        $id = trim( @$data[$this->field_id] );
+        $id = trim(@$data[$this->field_id]);
 
-        if($this->table_id == 'id')
+        if ($this->table_id == 'id')
             unset($data[$this->table_id]);
 
         $response = array();
 
-        if( $id && $this->get($id) ) { // update
+        if ($id && $this->get($id)) { // update
 
             $result = $this->response_before_edit($id, $data);
 
-            if($result){
+            if ($result) {
                 return $result;
             }
 
@@ -915,31 +918,31 @@ class Module extends Model
 
             $external_fields = array();
 
-            foreach($columns as $key) {
+            foreach ($columns as $key) {
 
                 $value = @$data[$key];
 
-                if( isset($data[$key]) ) {
+                if (isset($data[$key])) {
                     $data[$key] = $this->formatField($key, $value, 'add', $data);
                 }
 
-                if(@$this->fields[$key]['type'] == 'composite' || @$this->fields[$key]['type'] == 'inline') {
+                if (@$this->fields[$key]['type'] == 'composite' || @$this->fields[$key]['type'] == 'inline') {
 
                     $external_fields[$key] = $value;
                     unset($data[$key]);
                 }
             }
 
-            if($this->table_exists)
-            $this->update($data, array(
-                $this->field_id => $id
-            ));
+            if ($this->table_exists)
+                $this->update($data, array(
+                    $this->field_id => $id
+                ));
 
             $this->saveExternalRelations($id, $external_fields);
 
             $this->callback_after_edit($id, $data);
 
-            $this->filters = array($this->phisical_table.'.'.$this->field_id.'=' => $id);
+            $this->filters = array($this->phisical_table . '.' . $this->field_id . '=' => $id);
             $response = array('status' => 'success', $this->name => $this->getList(FALSE, TRUE));
 
         } else { // insert
@@ -949,7 +952,7 @@ class Module extends Model
 
             $data = $this->callback_before_save(FALSE, $data);
 
-            if($result){
+            if ($result) {
                 return $result;
             }
 
@@ -957,43 +960,44 @@ class Module extends Model
 
             $external_fields = array();
 
-            foreach($columns as $key) {
+            foreach ($columns as $key) {
 
                 $value = @$data[$key];
 
-                if( isset($data[$key]) ) {
+                if (isset($data[$key])) {
                     $data[$key] = $this->formatField($key, $value, 'add', $data);
                 }
 
-                if(@$this->fields[$key]['type'] == 'composite' || @$this->fields[$key]['type'] == 'inline') {
+                if (@$this->fields[$key]['type'] == 'composite' || @$this->fields[$key]['type'] == 'inline') {
 
                     $external_fields[$key] = $value;
                     unset($data[$key]);
                 }
             }
 
-            if($this->table_exists)
-            $id = $this->insert($data);
+            if ($this->table_exists)
+                $id = $this->insert($data);
 
             $this->saveExternalRelations($id, $external_fields);
 
             $this->callback_after_add($id, $data);
 
 
-            $this->filters = array($this->phisical_table.'.'.$this->field_id.'=' => $id);
+            $this->filters = array($this->phisical_table . '.' . $this->field_id . '=' => $id);
             $response = array('status' => 'success', $this->name => $this->getList(FALSE, TRUE));
         }
 
         return $response;
     }
 
-    function saveExternalRelations($id, $relations) {
+    function saveExternalRelations($id, $relations)
+    {
 
-        foreach($relations as $key => $values) {
+        foreach ($relations as $key => $values) {
 
             $field = $this->fields[$key];
 
-            if( $field['type'] == 'composite' ) {
+            if ($field['type'] == 'composite') {
 
                 $composite = $field['composite'];
 
@@ -1003,26 +1007,26 @@ class Module extends Model
                 $sql = "SELECT * FROM `{$composite['relation_table']}` WHERE `{$composite['relation_column']}`='$id'";
                 $current_rows = $this->fetch_result($sql);
 
-                if( $current_rows ) {
+                if ($current_rows) {
 
                     $existing_ids = array();
                     $existing_keys = array();
-                    foreach($current_rows as $row) {
+                    foreach ($current_rows as $row) {
                         $existing_ids[] = $row[$external_id];
 
                         $existing_keys[$row[$external_id]] = $row['id'];
                     }
 
-                    if( !empty($values) && is_array($values) && count($values) ) {
+                    if (!empty($values) && is_array($values) && count($values)) {
 
                         $diff = array_diff($existing_ids, $values);
 
                         $values_array = array();
-                        foreach($diff as $val) {
-                            $values_array[] = "'" . $val."'";
+                        foreach ($diff as $val) {
+                            $values_array[] = "'" . $val . "'";
                         }
 
-                        if( !empty($diff) ) {
+                        if (!empty($diff)) {
                             $sql = "DELETE FROM `{$composite['relation_table']}` WHERE `{$composite['relation_column']}`='$id' AND $external_id IN (" . implode(',', $values_array) . ")";
                             $this->query($sql);
                         }
@@ -1030,17 +1034,16 @@ class Module extends Model
                         $sql = "INSERT INTO `{$composite['relation_table']}`(`{$composite['relation_column']}`, {$composite['external_column']}) VALUES";
 
 
-
                         $values_array = array();
-                        foreach($values as $val) {
-                            if( !isset($existing_keys[$val]) ) {
-                                $values_array[] = "('$id','" . $val."')";
+                        foreach ($values as $val) {
+                            if (!isset($existing_keys[$val])) {
+                                $values_array[] = "('$id','" . $val . "')";
                             }
                         }
 
                         $sql .= implode(',', $values_array);
 
-                        if(!empty($values_array)) {
+                        if (!empty($values_array)) {
                             $this->query($sql);
                         }
 
@@ -1050,23 +1053,23 @@ class Module extends Model
                         $this->query($sql);
                     }
 
-                } else if( !empty($values) && is_array($values) && count($values) ) {
+                } else if (!empty($values) && is_array($values) && count($values)) {
 
                     $sql = "INSERT INTO `{$composite['relation_table']}`(`{$composite['relation_column']}`, {$composite['external_column']}) VALUES";
 
                     $values_array = array();
-                    foreach($values as $key=>$val) {
-                        if($val)
+                    foreach ($values as $key => $val) {
+                        if ($val)
                             $values_array[] = "('$id','" . $val . "')";
                     }
 
-                    if(!empty($values_array)) {
+                    if (!empty($values_array)) {
                         $sql .= implode(',', $values_array);
                         $this->query($sql);
                     }
                 }
 
-            } else if($field['type'] == 'inline') {
+            } else if ($field['type'] == 'inline') {
 
                 $model = $field['model'];
                 $parent_id = $id;
@@ -1077,13 +1080,14 @@ class Module extends Model
         }
     }
 
-    function saveInlineRelations($parent_id, $parentModel, $model, $values) {
+    function saveInlineRelations($parent_id, $parentModel, $model, $values)
+    {
 
         $external_fields = array();
 
-        if(!empty($values)) {
+        if (!empty($values)) {
 
-            foreach($values as &$value) {
+            foreach ($values as &$value) {
 
                 if (isset($value[$this->name . '_id'])) {
                     $value[$this->phisical_table . '_id'] = $value[$this->name . '_id'];
@@ -1119,22 +1123,23 @@ class Module extends Model
         }
     }
 
-    function upload() {
+    function upload()
+    {
 
         $field = FALSE;
 
         $ds = DIRECTORY_SEPARATOR;
 
-        if( !empty($_FILES) ) {
+        if (!empty($_FILES)) {
 
-            foreach($_FILES as $key => $value) {
-                if(isset($this->fields[$key])) {
+            foreach ($_FILES as $key => $value) {
+                if (isset($this->fields[$key])) {
                     $field = $this->fields[$key];
                     break;
                 }
             }
 
-            if($field) {
+            if ($field) {
 
                 $field = $this->callback_before_upload($field);
 
@@ -1148,15 +1153,15 @@ class Module extends Model
 
                     $targetPath = $field['settings']['path'];
 
-                    $targetFile =  $targetPath. $_FILES[$key]['name'];
+                    $targetFile = $targetPath . $_FILES[$key]['name'];
 
                     $newFileName = file_newname($targetPath, $_FILES[$key]['name']);
 
                     $targetFile = $targetPath . $newFileName;
 
-                    @mkdir( $targetPath, 0777, true );
+                    @mkdir($targetPath, 0777, true);
 
-                    move_uploaded_file($tempFile,$targetFile);
+                    move_uploaded_file($tempFile, $targetFile);
 
                     $response = $newFileName;
 
@@ -1164,7 +1169,7 @@ class Module extends Model
 
                 }
 
-            } else if( isset($_REQUEST['field']) ) {
+            } else if (isset($_REQUEST['field'])) {
 
                 $field = $this->fields[$_REQUEST['field']];
 
@@ -1193,9 +1198,9 @@ class Module extends Model
 
                     $targetPath = $field['settings']['path'];
 
-                    $targetFile =  $targetPath. $name;
+                    $targetFile = $targetPath . $name;
 
-                    @mkdir( $targetPath, 0777, true );
+                    @mkdir($targetPath, 0777, true);
 
                     // Save file in the uploads folder.
                     move_uploaded_file($_FILES["file"]["tmp_name"], $targetFile);
@@ -1215,13 +1220,13 @@ class Module extends Model
             $field = $this->callback_before_upload($field);
 
             $value = @trim($_REQUEST['value']);
-            if( $field && $value ) {
+            if ($field && $value) {
 
-                $result  = array();
+                $result = array();
 
                 $obj['name'] = @$field['settings']['partial'] . $value;
-                if( file_exists($field['settings']['path'].$ds.$value) ) {
-                    $obj['size'] = filesize($field['settings']['path'].$ds.$value);
+                if (file_exists($field['settings']['path'] . $ds . $value)) {
+                    $obj['size'] = filesize($field['settings']['path'] . $ds . $value);
                 } else {
                     $obj['size'] = 0;
                 }
@@ -1232,11 +1237,12 @@ class Module extends Model
         }
     }
 
-    function delete($id='', $table='') {
+    function delete($id = '', $table = '')
+    {
 
         $id = @$_REQUEST[$this->field_id] ? $_REQUEST[$this->field_id] : $id;
 
-        if(!isset($this->fields['status'])) {
+        if (!isset($this->fields['status'])) {
 
             parent::delete($id);
 
@@ -1249,31 +1255,70 @@ class Module extends Model
         }
     }
 
-    function getCompositeDropdown($field, $data) { return FALSE; }
+    function getCompositeDropdown($field, $data)
+    {
+        return FALSE;
+    }
 
-    function callback_before_delete($id, $data) {return $data;}
-    function callback_before_get($id, $data) {return $data;}
-    function callback_before_save($id, $data) {return $data;}
+    function callback_before_delete($id, $data)
+    {
+        return $data;
+    }
 
-    function callback_after_edit($id, $data) {return $data;}
-    function callback_after_add($id, $data) {return $data;}
+    function callback_before_get($id, $data)
+    {
+        return $data;
+    }
 
-    function callback_before_edit($id, $data) {return $data;}
-    function callback_before_add($data) {return $data;}
+    function callback_before_save($id, $data)
+    {
+        return $data;
+    }
 
-    function response_before_edit($id, $data) {return FALSE;}
-    function response_before_add($data) {return FALSE;}
+    function callback_after_edit($id, $data)
+    {
+        return $data;
+    }
 
-    function callback_before_upload($field, $data='') {return $field;}
+    function callback_after_add($id, $data)
+    {
+        return $data;
+    }
 
-    function formatField($key, $value, $type, $data=array()) {
+    function callback_before_edit($id, $data)
+    {
+        return $data;
+    }
 
-        if($type == 'grid') {
+    function callback_before_add($data)
+    {
+        return $data;
+    }
 
-            if( trim($key) && @isset($this->dropdowns[$key]) ) {
+    function response_before_edit($id, $data)
+    {
+        return FALSE;
+    }
+
+    function response_before_add($data)
+    {
+        return FALSE;
+    }
+
+    function callback_before_upload($field, $data = '')
+    {
+        return $field;
+    }
+
+    function formatField($key, $value, $type, $data = array())
+    {
+
+        if ($type == 'grid') {
+
+            if (trim($key) && @isset($this->dropdowns[$key])) {
                 return @$this->dropdowns[$key][$value];
             }
-        } else if(@$this->fields[$key]['type'] == 'editor' && ($type == 'get' || $type == 'add')) {
+        } else if (@$this->fields[$key]['type'] == 'editor' && ($type == 'get' || $type == 'add')) {
             // if magic quotes enabled on server side
             return str_replace('\"', '"', $value);
         }

@@ -9,10 +9,11 @@ if($port != '80') {
     $port = '';
 }
 
-define('BASE_URL', $protocol . ':' . '//' . $_SERVER['SERVER_NAME'] . $port . '/phpadmin/');
-$constants['BASE_URL'] = BASE_URL;
+$uri = '/fastadmin';
+define('BASE_URL', $protocol . ':' . '//' . $_SERVER['SERVER_NAME'] . $port . '/fastadmin/');
 
 $default_controllers['admin'] = 'login';
+$default_controllers['home'] = 'index';
 
 define('DEFAULT_CONTROLLER', 'home');
 define('DEFAULT_FOLDER_CONTROLLER', 'login');

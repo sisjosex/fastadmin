@@ -4,14 +4,12 @@ require_once(BASE_PATH . 'system/controller.php');
 
 class Home extends Controller
 {
-
-
     function __construct()
     {
-
         parent::__construct();
     }
-    /*
+
+    /* Test for preview emails
     function email_verify()
     {
         $this->view->add('email/user-account_verify', array());
@@ -29,10 +27,9 @@ class Home extends Controller
         $this->view->add('email/admin-account_verify_copy', array());
         $this->view->render();
     }*/
+
     function index()
     {
-
-        header('Location: /index.php');
+        header('Location: /fastadmin/admin');
     }
-    
 }

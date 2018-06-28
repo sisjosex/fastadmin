@@ -43,7 +43,7 @@ class UserAppModel extends Module
                 'validation' => array(
                     'rules' => array(
                         'required' => true,
-                        'email' => true
+                        'email' => false
                     ),
                     'messages' => array(
                         'required' => lang('Nombre es requerido')
@@ -262,7 +262,6 @@ class UserAppModel extends Module
     }
 
     function response_before_edit($id, $data) {
-
         if($this->get_where(" `email`='" . addslashes($data['email']) . "' AND `id`!='$id' AND status!='deleted'") ) {
             return array(
                 'status' => 'fail',

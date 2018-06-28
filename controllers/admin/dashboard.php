@@ -49,36 +49,67 @@ class Dashboard extends Backend
 
         global $lang;
 
-        $userModule                             = new UserModel();
-        $userAppModule                          = new UserAppModel();
-        $userFavoriteModule                     = new UserFavoriteModel();
-        $userRecipeModule                       = new UserRecipeModel();
-        $categoryModule                         = new CategoryModel();
-        $subcategoryModule                      = new SubcategoryModel();
-        $unitModule                             = new UnitModel();
-        $ingredientModule                       = new IngredientModel();
-        $foodModule                             = new FoodModel();
-        $foodIngredientModule                   = new FoodIngredientModel();
-        $foodStepModule                         = new FoodStepModel();
-        $foodStepMediaModule                    = new FoodStepMediaModel();
-        $tipModule                              = new TipModel();
-        $tipCategoryModule                      = new TipCategoryModel();
-        $categoriaModule                        = new CategoriaModel();
-        $calculadora_caloriasModule             = new Calculadora_calorias_Model();
-        $calculadora_calorias_diariasModule     = new Calculadora_calorias_diarias_Model();
-        $calculadora_nutrientesModule           = new Calculadora_nutrientes_Model();
-        $calculadora_proteinasModule            = new Calculadora_proteinas_Model();
-        $alimentoModule                         = new AlimentoModel();
-	$alimentoCaseroModule                         = new AlimentoCaseroModel();
-	$categoriaCaseraModule                  = new CategoriaCaseraModel();
-        $medidasCocinaModule                    = new MedidasCocinaModel();
-        $medidasCacerasModule                   = new MedidasCacerasModel();
-        $medidasReferencialesModule             = new MedidasReferencialesModel();
-        $medidasLiquidasModule                  = new MedidasLiquidasModel();
-        $tutorialModule                         = new TutorialModel();
-        $reportsModule                          = new ReportsModel();
+        $userModule = new UserModel();
+        $userAppModule = new UserAppModel();
+        $userFavoriteModule = new UserFavoriteModel();
+        $userRecipeModule = new UserRecipeModel();
+        $categoryModule = new CategoryModel();
+        $subcategoryModule = new SubcategoryModel();
+        $unitModule = new UnitModel();
+        $ingredientModule = new IngredientModel();
+        $foodModule = new FoodModel();
+        $foodIngredientModule = new FoodIngredientModel();
+        $foodStepModule = new FoodStepModel();
+        $foodStepMediaModule = new FoodStepMediaModel();
+        $tipModule = new TipModel();
+        $tipCategoryModule = new TipCategoryModel();
+        $categoriaModule = new CategoriaModel();
+        $calculadora_caloriasModule = new Calculadora_calorias_Model();
+        $calculadora_calorias_diariasModule = new Calculadora_calorias_diarias_Model();
+        $calculadora_nutrientesModule = new Calculadora_nutrientes_Model();
+        $calculadora_proteinasModule = new Calculadora_proteinas_Model();
+        $alimentoModule = new AlimentoModel();
+        $alimentoCaseroModule = new AlimentoCaseroModel();
+        $categoriaCaseraModule = new CategoriaCaseraModel();
+        $medidasCocinaModule = new MedidasCocinaModel();
+        $medidasCacerasModule = new MedidasCacerasModel();
+        $medidasReferencialesModule = new MedidasReferencialesModel();
+        $medidasLiquidasModule = new MedidasLiquidasModel();
+        $tutorialModule = new TutorialModel();
+        $reportsModule = new ReportsModel();
+        $userFavoriteModule = new UserFavoriteModel();
+        $userRecipeModule = new UserRecipeModel();
+        $subcategoryModule = new SubcategoryModel();
+        $foodIngredientModule = new FoodIngredientModel();
+        $foodStepModule = new FoodStepModel();
+        $foodStepMediaModule = new FoodStepMediaModel();
 
         $data['title'] = lang("Admin Panel");
+
+
+        $data['modules']['user_favorite'] = array(
+            'model' => $userFavoriteModule->purgeModel()
+        );
+
+        $data['modules']['subcategory'] = array(
+            'model' => $subcategoryModule->purgeModel()
+        );
+
+        $data['modules']['user_recipe'] = array(
+            'model' => $userRecipeModule->purgeModel()
+        );
+
+        $data['modules']['food_ingredient'] = array(
+            'model' => $foodIngredientModule->purgeModel()
+        );
+
+        $data['modules']['food_step'] = array(
+            'model' => $foodStepModule->purgeModel()
+        );
+
+        $data['modules']['food_step_media'] = array(
+            'model' => $foodStepMediaModule->purgeModel()
+        );
 
         if (Auth::$user['role'] == 'sadmin' || Auth::$user['role'] == 'admin')
             $data['modules']['user'] = array(
@@ -395,9 +426,9 @@ class Dashboard extends Backend
                     )
                 )
             );
-	    
-	    
-	    if (Auth::$user['role'] == 'sadmin' || Auth::$user['role'] == 'admin')
+
+
+        if (Auth::$user['role'] == 'sadmin' || Auth::$user['role'] == 'admin')
             $data['modules']['alimento_casero'] = array(
                 'model' => $alimentoCaseroModule->purgeModel(),
                 'settings' => array(
@@ -927,8 +958,8 @@ class Dashboard extends Backend
                     )
                 )
             );
-	    
-	    if (Auth::$user['role'] == 'sadmin' || Auth::$user['role'] == 'admin')
+
+        if (Auth::$user['role'] == 'sadmin' || Auth::$user['role'] == 'admin')
             $data['modules']['categoria_casera'] = array(
                 'model' => $categoriaCaseraModule->purgeModel(),
                 'settings' => array(
@@ -1089,58 +1120,57 @@ class Dashboard extends Backend
 
 
         //if (Auth::$user['role'] == 'sadmin' || Auth::$user['role'] == 'admin')
-            $data['modules']['medidas_referenciales'] = array(
-                'model' => $medidasReferencialesModule->purgeModel(),
-                'settings' => array(
-                    'container' => '#page',
-                    'class' => 'page'
+        $data['modules']['medidas_referenciales'] = array(
+            'model' => $medidasReferencialesModule->purgeModel(),
+            'settings' => array(
+                'container' => '#page',
+                'class' => 'page'
+            ),
+            'containers' => array(
+                'modal' => array(
+                    'settings' => array()
                 ),
-                'containers' => array(
-                    'modal' => array(
-                        'settings' => array()
-                    ),
-                    'form' => array(
-                        'settings' => array()
-                    )/*,
+                'form' => array(
+                    'settings' => array()
+                )/*,
                     'detail' => array(
                         'settings' => array()
                     )*/,
-                    'grid' => array(
-                        'settings' => array(
-                            'actions' => array(
-                                /*array('type' => 'view', 'text' => lang('Ver'), 'icon' => ''),*/
-                                array('type' => 'edit', 'text' => lang('Edit'), 'icon' => ''),
-                                array('type' => 'delete', 'text' => lang('Delete'), 'icon' => '')
-                            )
+                'grid' => array(
+                    'settings' => array(
+                        'actions' => array(
+                            /*array('type' => 'view', 'text' => lang('Ver'), 'icon' => ''),*/
+                            array('type' => 'edit', 'text' => lang('Edit'), 'icon' => ''),
+                            array('type' => 'delete', 'text' => lang('Delete'), 'icon' => '')
                         )
-                    ),
-                    'toolbar' => array(
-                        'settings' => array(
-                            'actions' => array(
-                                array(
-                                    'type' => 'text',
-                                    'title' => lang('Medidas Referenciales'),
-                                    'template' => 'h2'
-                                ),
-                                array(
-                                    'type' => 'text',
-                                    'title' => lang('Administrar medidas referenciales'),
-                                    'template' => 'h5'
-                                ),
-                                array(
-                                    'type' => 'break'
-                                ),
-                                array(
-                                    'type' => 'button',
-                                    'title' => lang('Nueva medida referencial'),
-                                    'action' => 'new'
-                                )
+                    )
+                ),
+                'toolbar' => array(
+                    'settings' => array(
+                        'actions' => array(
+                            array(
+                                'type' => 'text',
+                                'title' => lang('Medidas Referenciales'),
+                                'template' => 'h2'
+                            ),
+                            array(
+                                'type' => 'text',
+                                'title' => lang('Administrar medidas referenciales'),
+                                'template' => 'h5'
+                            ),
+                            array(
+                                'type' => 'break'
+                            ),
+                            array(
+                                'type' => 'button',
+                                'title' => lang('Nueva medida referencial'),
+                                'action' => 'new'
                             )
                         )
                     )
                 )
-            );
-
+            )
+        );
 
 
         if (Auth::$user['role'] == 'sadmin' || Auth::$user['role'] == 'admin')
@@ -1195,7 +1225,6 @@ class Dashboard extends Backend
                     )
                 )
             );
-
 
 
         if (Auth::$user['role'] == 'sadmin' || Auth::$user['role'] == 'admin')
@@ -1470,8 +1499,8 @@ class Dashboard extends Backend
                 'icon' => '',
                 'module' => 'categoria_casera'
             );
-	    
-	if (isset($data['modules']['alimento_casero']))
+
+        if (isset($data['modules']['alimento_casero']))
             $data['sidebar'][] = array(
                 'title' => lang('Alimento Casero'),
                 'attr' => array(
@@ -1480,8 +1509,8 @@ class Dashboard extends Backend
                 'icon' => '',
                 'module' => 'alimento_casero'
             );
-	
-	if (isset($data['modules']['medidas_cocina']))
+
+        if (isset($data['modules']['medidas_cocina']))
             $data['sidebar'][] = array(
                 'title' => lang('Medidas de Cocina'),
                 'attr' => array(

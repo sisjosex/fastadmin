@@ -52,7 +52,7 @@ class FoodModel extends Module
             )
         );
 
-        /*$this->addField(
+        $this->addField(
             array(
                 "key" => "subcategory_id",
                 "name" => lang("Sub-Categoria"),
@@ -74,7 +74,7 @@ class FoodModel extends Module
                 "filtrable" => true,
                 'depends_of' => 'category_id'
             )
-        );*/
+        );
 
         $this->addField(
             array(
@@ -375,7 +375,7 @@ class FoodModel extends Module
             $this->phisical_table . '.status!=' => 'deleted'
         );
 
-        $this->addGroup('form', array('id', 'photo', 'video', 'category_id', 'type', 'level', 'name', 'url', 'duration', 'quantity', 'steps', 'ingredients'));
+        $this->addGroup('form', array('id', 'photo', 'video', 'category_id', 'subcategory_id', 'type', 'level', 'name', 'url', 'duration', 'quantity', 'steps', 'ingredients'));
         $this->addGroup('grid', array('id', 'category', 'name', 'duration', 'photo', 'video', 'type', 'level', 'likes', 'recipes', 'quantity'));
     }
 

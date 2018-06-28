@@ -11,23 +11,23 @@ master_template.editor = '<textarea/>';
 master_template.date = '<input type="text"/>';
 master_template.datetime = '<input type="datetime"/>';
 master_template.map = '<div>' +
-                        '<input type="text" class="search full-width" style="display:none;" placeholder="' + lang('Address') + '"/>' +
-                        '<input type="hidden" class="lat" />' +
-                        '<input type="hidden" class="lon" />' +
-                        '<div class="map" /></div>';
+    '<input type="text" class="search full-width" style="display:none;" placeholder="' + lang('Address') + '"/>' +
+    '<input type="hidden" class="lat" />' +
+    '<input type="hidden" class="lon" />' +
+    '<div class="map" /></div>';
 master_template.map_detail = '' +
-'<div class="detail-field"><input type="text" class="search full-width" style="display:none;" placeholder="' + lang('Address') + '"/>' +
-'<input type="hidden" class="lat" />' +
-'<input type="hidden" class="lon" />' +
-'<div class="map"></div></div>';
+    '<div class="detail-field"><input type="text" class="search full-width" style="display:none;" placeholder="' + lang('Address') + '"/>' +
+    '<input type="hidden" class="lat" />' +
+    '<input type="hidden" class="lon" />' +
+    '<div class="map"></div></div>';
 master_template.email = '<input type="email"/>';
 master_template.password = '<input type="password"/>';
 master_template.upload = '<div class="dropzone">' +
-                            '<div class="dz-default dz-message">' +
-                                '<span>' + lang('Drop files here to upload') + '</span>' +
-                            '</div>' +
-                         '</div>' +
-                        '<input type="hidden" />';
+    '<div class="dz-default dz-message">' +
+    '<span>' + lang('Drop files here to upload') + '</span>' +
+    '</div>' +
+    '</div>' +
+    '<input type="hidden" />';
 master_template.mask = '<input type="text"/>';
 master_template.dropdown = '<select/>';
 master_template.multiple = '<select multiple="multiple"/>';
@@ -95,10 +95,10 @@ var widgets = {};
 var containers = {};
 
 var validation = {};
-$.validator.setDefaults({ ignore: '' });
+$.validator.setDefaults({ignore: ''});
 
 function getValidation(key) {
-    switch(key) {
+    switch (key) {
         case 'default': {
             return {
                 rules: {},
@@ -140,8 +140,7 @@ function getValidation(key) {
 
             break;
         }
-        default:
-        {
+        default: {
             return {
                 rules: {}
                 ,
@@ -191,12 +190,10 @@ var datepickerConfig = {
     separator: '-',
     language: 'auto',
     startOfWeek: 'sunday',// or monday
-    getValue: function()
-    {
+    getValue: function () {
         return this.value;
     },
-    setValue: function(s)
-    {
+    setValue: function (s) {
         this.value = s;
     },
     startDate: false,
@@ -208,24 +205,24 @@ var datepickerConfig = {
         enabled: false
     },
     shortcuts:
-    {
-        //'prev-days': [1,3,5,7],
-        'next-days': [3,5,7],
-        //'prev' : ['week','month','year'],
-        'next' : ['week','month','year']
-    },
-    customShortcuts : [],
-    inline:false,
+        {
+            //'prev-days': [1,3,5,7],
+            'next-days': [3, 5, 7],
+            //'prev' : ['week','month','year'],
+            'next': ['week', 'month', 'year']
+        },
+    customShortcuts: [],
+    inline: false,
     container: 'body',
-    alwaysOpen:false,
-    singleDate:false,
-    batchMode:false
+    alwaysOpen: false,
+    singleDate: false,
+    batchMode: false
 };
 
 var datepickerConfigSingle = {
     format: 'YYYY-MM-DD',
     autoClose: true,
-    singleDate : true,
+    singleDate: true,
     showShortcuts: false
 };
 
@@ -240,7 +237,7 @@ widgets.daterange = function (element, field, model) {
         return this;
     };
 
-    this.reset = function() {
+    this.reset = function () {
 
     };
 
@@ -258,11 +255,11 @@ widgets.date = function (element, field, model) {
         return this;
     };
 
-    this.reset = function() {
+    this.reset = function () {
 
     };
 
-    this.setValue = function(value) {
+    this.setValue = function (value) {
 
     };
 
@@ -285,7 +282,7 @@ widgets.upload = function (element, field, model, module) {
 
     this.init = function () {
 
-        if( self.dropzone === undefined ) {
+        if (self.dropzone === undefined) {
 
             var field_id = field.id ? field.id : field.key;
             self.field_key = field.id ? field.id : model.name + '_' + field_id;
@@ -294,18 +291,16 @@ widgets.upload = function (element, field, model, module) {
             $(element).dropzone({
                 paramName: field.key,
                 url: field.settings.url,
-                addRemoveLinks:true,
-                maxFiles:1,
-                init: function() {
+                addRemoveLinks: true,
+                maxFiles: 1,
+                init: function () {
 
-                    /*this.on("addedfile", function(file) {});*/
-
-                    this.on("removedfile", function(file) {
+                    this.on("removedfile", function (file) {
 
                         $('#' + self.field_key).val('');
                     });
 
-                    this.on("sending", function(file, xhr, formData) {
+                    this.on("sending", function (file, xhr, formData) {
 
                         self.xhr = xhr;
 
@@ -316,19 +311,19 @@ widgets.upload = function (element, field, model, module) {
                         formData.append('name', fileName);
                     });
 
-                    this.on("complete", function(file) {
+                    this.on("complete", function (file) {
 
-                        if(file.logged === false) {
+                        if (file.logged === false) {
                             window.location.reload();
                         }
 
-                        if(file.status === 'error') {
+                        if (file.status === 'error') {
 
                         } else {
 
                             fileName = self.xhr.response;
 
-                            if(self.field_key == 'tip_image') {
+                            if (self.field_key == 'tip_image') {
 
                                 $('#' + self.field_key).remove();
                             }
@@ -337,13 +332,13 @@ widgets.upload = function (element, field, model, module) {
                         }
                     });
 
-                    if(self.dropzone === undefined) {
+                    if (self.dropzone === undefined) {
                         self.dropzone = this;
                     }
 
                     return this;
                 },
-                sending: function() {
+                sending: function () {
 
                     self.dropzone.options.params = self.getParams();
                 }
@@ -356,13 +351,15 @@ widgets.upload = function (element, field, model, module) {
         return this;
     };
 
-    this.reset = function() {
+    this.reset = function () {
 
         self.dropzone.removeAllFiles(true);
     };
 
 
-    this.setValue = function(value) {
+    this.setValue = function (value) {
+
+        console.log(value);
 
         self.dropzone.options.params = self.getParams();
 
@@ -375,15 +372,15 @@ widgets.upload = function (element, field, model, module) {
         params['field'] = field.key;
         params['value'] = value;
 
-        $.post(field.settings.url, params, function(data) {
+        $.post(field.settings.url, params, function (data) {
 
             self.dropzone.removeAllFiles(true);
 
-            if(data) {
+            if (data) {
 
-                $.each(data, function(key,value){
+                $.each(data, function (key, value) {
 
-                    var mockFile = { name: value.name, size: value.size, type: 'image' };
+                    var mockFile = {name: value.name, size: value.size, type: 'image'};
 
                     self.dropzone.addFile(mockFile, true);
 
@@ -393,9 +390,9 @@ widgets.upload = function (element, field, model, module) {
 
             } else {
 
-                for(var i in self.dropzone.files) {
+                for (var i in self.dropzone.files) {
 
-                    self.dropzone.removeFile( files[i] );
+                    self.dropzone.removeFile(files[i]);
                 }
             }
 
@@ -403,14 +400,14 @@ widgets.upload = function (element, field, model, module) {
     };
 
 
-    self.getParams = function() {
+    self.getParams = function () {
 
         var array = module.containers.form.element.serializeArray();
         var params = {};
 
-        var result =  new FormData();
+        var result = new FormData();
 
-        for(var i in array) {
+        for (var i in array) {
             var obj = array[i];
 
             params[obj.name.replace(model.name, '').replace('[', '').replace(']', '')] = obj.value;
@@ -442,11 +439,11 @@ widgets.map = function (element, field, model, section) {
 
     this.init = function () {
 
-        if( self.map === undefined ) {
+        if (self.map === undefined) {
 
             var field_id = field.id ? field.id : field.key;
 
-            if(section == 'detail') {
+            if (section == 'detail') {
 
                 self.field_key = field.id ? field.id : model.name + '_' + field_id;
 
@@ -469,7 +466,7 @@ widgets.map = function (element, field, model, section) {
         return this;
     };
 
-    this.initDelayed = function() {
+    this.initDelayed = function () {
 
         var field_id = field.id ? field.id : field.key;
         self.field_key = field.id ? field.id : model.name + '_' + field_id;
@@ -483,22 +480,22 @@ widgets.map = function (element, field, model, section) {
 
         self.geocoder = new google.maps.Geocoder();
 
-	if(field.settings.searchable) {
-		
-		element.find('.search').show();
-		
-	        element.find('.search').unbind('change').on('change', function(){
+        if (field.settings.searchable) {
 
-	            self.geocodeAddress($(this).val());
+            element.find('.search').show();
 
-	            return false;
-	        });
-	
-	}
+            element.find('.search').unbind('change').on('change', function () {
 
-        element.find('.search').keypress(function(e){
+                self.geocodeAddress($(this).val());
 
-            if(e.which == 13){
+                return false;
+            });
+
+        }
+
+        element.find('.search').keypress(function (e) {
+
+            if (e.which == 13) {
 
                 self.geocodeAddress($(this).val());
 
@@ -506,7 +503,7 @@ widgets.map = function (element, field, model, section) {
             }
         });
 
-        google.maps.event.addListener(self.map, 'click', function(e) {
+        google.maps.event.addListener(self.map, 'click', function (e) {
 
             self.removeAllMarkers();
 
@@ -518,15 +515,15 @@ widgets.map = function (element, field, model, section) {
         return this;
     };
 
-    this.geocodeAddress = function(address) {
+    this.geocodeAddress = function (address) {
 
         self.value = '';
 
-        if(self.map != undefined) {
+        if (self.map != undefined) {
 
             self.removeAllMarkers();
 
-            self.geocoder.geocode( { 'address': address}, function(results, status) {
+            self.geocoder.geocode({'address': address}, function (results, status) {
 
                 if (status == google.maps.GeocoderStatus.OK) {
 
@@ -539,38 +536,38 @@ widgets.map = function (element, field, model, section) {
 
                 } else {
 
-                    alert( lang('Address not found') );
+                    alert(lang('Address not found'));
                 }
             });
         }
     };
 
-    this.reset = function() {
+    this.reset = function () {
 
         self.value = '';
 
         self.removeAllMarkers();
 
-        if(self.map != undefined) {
+        if (self.map != undefined) {
             self.map.setCenter(new google.maps.LatLng(field.settings.center.latitude, field.settings.center.longitude));
             self.map.setZoom(field.settings.zoom);
         }
     };
 
 
-    this.setValue = function(value) {
+    this.setValue = function (value) {
 
         this.value = value;
 
         self.removeAllMarkers();
 
-        if(self.map != undefined) {
+        if (self.map != undefined) {
 
-            setTimeout(function(){
+            setTimeout(function () {
 
                 google.maps.event.trigger(self.map, 'resize');
 
-                if(value && value.latitude && (self.value.latitude !== field.settings.center.latitude && self.value.longitude !== field.settings.center.longitude)) {
+                if (value && value.latitude && (self.value.latitude !== field.settings.center.latitude && self.value.longitude !== field.settings.center.longitude)) {
 
                     var latLong = new google.maps.LatLng(self.value.latitude, self.value.longitude);
                     self.map.setCenter(latLong);
@@ -589,7 +586,7 @@ widgets.map = function (element, field, model, section) {
         }
     }
 
-    this.addMarker = function(latLong) {
+    this.addMarker = function (latLong) {
 
         self.fields.latitude.val(latLong.lat());
         self.fields.longitude.val(latLong.lng());
@@ -602,11 +599,11 @@ widgets.map = function (element, field, model, section) {
             //shadow: shadow,
             //shape: shape
             position: latLong,
-            animation:google.maps.Animation.DROP,
-            draggable:field.settings.dragdable ? true : false
+            animation: google.maps.Animation.DROP,
+            draggable: field.settings.dragdable ? true : false
         });
 
-        google.maps.event.addListener(marker, 'dragend', function(evt){
+        google.maps.event.addListener(marker, 'dragend', function (evt) {
             self.fields.latitude.val(evt.latLng.lat());
             self.fields.longitude.val(evt.latLng.lng());
         });
@@ -614,9 +611,9 @@ widgets.map = function (element, field, model, section) {
         self.markers.push(marker);
     };
 
-    this.removeAllMarkers = function() {
+    this.removeAllMarkers = function () {
 
-        for(var i in self.markers) {
+        for (var i in self.markers) {
             self.markers[i].setMap(null);
         }
 
@@ -639,7 +636,7 @@ widgets.editor = function (element, field, model) {
 
     this.init = function () {
 
-        if( self.editor === undefined ) {
+        if (self.editor === undefined) {
 
             var field_id = field.id ? field.id : field.key;
             self.field_key = field.id ? field.id : model.name + '_' + field_id;
@@ -662,13 +659,13 @@ widgets.editor = function (element, field, model) {
         return this;
     };
 
-    this.reset = function() {
+    this.reset = function () {
 
         $(element).editable("setHTML", "", false);
     };
 
 
-    this.setValue = function(value) {
+    this.setValue = function (value) {
 
         $(element).editable("setHTML", value, false);
     }
@@ -687,12 +684,12 @@ widgets.pagination = function (element, settings) {
 
     this.init = function () {
 
-        if( self.pagination === undefined ) {
+        if (self.pagination === undefined) {
 
             self.settings = {};
             self.settings.itemsOnPage = settings.per_page;
             self.settings.cssStyle = 'light-theme';
-            self.settings.onPageClick = function(pageNumber, event) {
+            self.settings.onPageClick = function (pageNumber, event) {
 
                 settings.onChange(pageNumber);
 
@@ -700,7 +697,6 @@ widgets.pagination = function (element, settings) {
             };
 
             element.pagination(self.settings);
-
 
 
             return this;
@@ -711,11 +707,11 @@ widgets.pagination = function (element, settings) {
     };
 
 
-    this.setValue = function(settings) {
+    this.setValue = function (settings) {
 
         element.pagination('updateItems', settings.total);
 
-        if(this.firstTime) {
+        if (this.firstTime) {
 
             element.parent().append('<div class="total"><span class="text"></span> Registros</div>');
 
@@ -739,7 +735,7 @@ widgets.tabs = function (element) {
         return this;
     };
 
-    this.reset = function() {
+    this.reset = function () {
 
         var tabElement = element.find('.tabs .title.selected');
 
@@ -771,7 +767,7 @@ containers.form = function (model, container, module) {
 
         } else {
 
-            if(validation[model.name] != undefined) {
+            if (validation[model.name] != undefined) {
 
                 self.validation_params = validation[model.name];
 
@@ -781,7 +777,7 @@ containers.form = function (model, container, module) {
             }
         }
 
-        if(!self.validation_params) {
+        if (!self.validation_params) {
             self.validation_params = {rules: {}, messages: {}};
         }
 
@@ -811,7 +807,7 @@ containers.form = function (model, container, module) {
 
             field = model.fields[model.field_group.form[key]];
 
-            if(!field) {
+            if (!field) {
 
                 continue;
             }
@@ -850,7 +846,11 @@ containers.form = function (model, container, module) {
 
                     field_element.attr('name', field_name);
 
-                    self.validation_params = initFormField(self.validation_params, field, field_element, {field_id: field_id, field_name: field_name, field_key: field_key});
+                    self.validation_params = initFormField(self.validation_params, field, field_element, {
+                        field_id: field_id,
+                        field_name: field_name,
+                        field_key: field_key
+                    });
 
                     self.fields[field_id] = field_element;
 
@@ -860,7 +860,11 @@ containers.form = function (model, container, module) {
 
                     var field_tmp = field_element.find('#' + field_key);
 
-                    self.validation_params = initFormField(self.validation_params, field, field_tmp, {field_id: field_id, field_name: field_name, field_key: field_key});
+                    self.validation_params = initFormField(self.validation_params, field, field_tmp, {
+                        field_id: field_id,
+                        field_name: field_name,
+                        field_key: field_key
+                    });
 
                     self.fields[field_id] = field_tmp;
                 }
@@ -869,7 +873,7 @@ containers.form = function (model, container, module) {
 
                 if (field.label !== false) {
 
-                    if($.trim(field.name) !== '') {
+                    if ($.trim(field.name) !== '') {
 
                         var label_element = buildFromTemplate(model, 'label', field);
 
@@ -881,7 +885,11 @@ containers.form = function (model, container, module) {
                     }
                 }
 
-                self.validation_params = initFormField(self.validation_params, field, field_element, {field_id: field_id, field_name: field_name, field_key: field_key});
+                self.validation_params = initFormField(self.validation_params, field, field_element, {
+                    field_id: field_id,
+                    field_name: field_name,
+                    field_key: field_key
+                });
 
                 self.fields[field_id] = field_element;
             }
@@ -954,11 +962,11 @@ containers.form = function (model, container, module) {
             }
         }
 
-        if(self.tabs.length > 1) {
+        if (self.tabs.length > 1) {
 
             var tab_container = buildFromTemplate('', 'tabs');
 
-            for(var i in self.tabs) {
+            for (var i in self.tabs) {
 
                 var tab = self.tabs[i];
 
@@ -1075,18 +1083,21 @@ containers.form = function (model, container, module) {
                     }
                 }
 
-            } if(field.model != undefined) {
+            }
+            if (field.model != undefined) {
 
-                if(field.type == 'dropdown') {
+                if (field.type == 'dropdown') {
 
                     var addInline = $('<i class="btn fa fa-icon fa-plus"></i>');
 
                     element.parent().append(addInline);
 
-                    addInline.attr('rel', field.model.name);
+                    addInline.attr('rel', getModel(field.model).name);
                     addInline.attr('key', field.key);
 
                     addInline.on('click', function () {
+
+                        console.log(moduleManager.modules[$(this).attr('rel')]);
 
                         moduleManager.modules[$(this).attr('rel')].containers.grid.actionRow('new', '', '', $(this).attr('rel'), $(this).attr('key'), function (response) {
 
@@ -1099,16 +1110,16 @@ containers.form = function (model, container, module) {
                 }
             }
 
-            if(widgets[field.type] !== undefined) {
+            if (widgets[field.type] !== undefined) {
 
-                    self.widgets[i] = new widgets[field.type](element, field, model, module);
+                self.widgets[i] = new widgets[field.type](element, field, model, module);
 
-                    if( self.widgets[i].initAfterShow === undefined ) {
+                if (self.widgets[i].initAfterShow === undefined) {
 
-                        //self.widgets[i].init();
-                    }
+                    //self.widgets[i].init();
+                }
 
-                    self.widgets[i].init();
+                self.widgets[i].init();
             }
         }
 
@@ -1151,7 +1162,7 @@ containers.form = function (model, container, module) {
 
         var url = $(this).attr('url');
 
-        if(urlOvewrite && !urlOvewrite.target) {
+        if (urlOvewrite && !urlOvewrite.target) {
             url = urlOvewrite;
         }
 
@@ -1175,7 +1186,7 @@ containers.form = function (model, container, module) {
 
                                 } else {
 
-                                    if(self.callback != undefined) {
+                                    if (self.callback != undefined) {
 
                                         self.callback(response);
                                     }
@@ -1208,7 +1219,7 @@ containers.form = function (model, container, module) {
 
                         self.element.unblock();
                     },
-                    error: function() {
+                    error: function () {
                         self.element.unblock();
                     }
                 }
@@ -1231,9 +1242,9 @@ containers.form = function (model, container, module) {
 
                 if (element.is('input') || element.is('textarea')) {
 
-                    if(element.is('input:checkbox')) {
+                    if (element.is('input:checkbox')) {
                         element.val('1');
-                        if(response[model.name][i] == '1') {
+                        if (response[model.name][i] == '1') {
                             element.attr('checked', 'checked');
                         }
                     } else {
@@ -1242,8 +1253,8 @@ containers.form = function (model, container, module) {
 
                     var field = model.fields[i];
 
-                    if(self.widgets[i] !== undefined) {
-                        self.widgets[i].setValue( response[model.name][i], response[model.name] );
+                    if (self.widgets[i] !== undefined) {
+                        self.widgets[i].setValue(response[model.name][i], response[model.name]);
                     }
 
                 } else if (model.fields[i].type == 'dropdown' || model.fields[i].type == 'multiple' || model.fields[i].type == 'composite') {
@@ -1272,7 +1283,7 @@ containers.form = function (model, container, module) {
                     if (module && module.inline) {
 
                         var listTmp = [];
-                        for(var k in response[model.name].inline[i]) {
+                        for (var k in response[model.name].inline[i]) {
                             listTmp.push(response[model.name].inline[i][k]);
                         }
 
@@ -1280,19 +1291,19 @@ containers.form = function (model, container, module) {
                         module.inline[i].containers.grid.refreshOnly();
                     }
 
-                } else if(self.widgets[i] != undefined) {
+                } else if (self.widgets[i] != undefined) {
 
-                    self.widgets[i].setValue( response[model.name][i], response[model.name] );
+                    self.widgets[i].setValue(response[model.name][i], response[model.name]);
                 }
             }
         }
-	
-	self.element.unblock();
+
+        self.element.unblock();
     };
 
-    this.initAfterShow = function() {
+    this.initAfterShow = function () {
 
-        for(var i in self.widgets) {
+        for (var i in self.widgets) {
             self.widgets[i].init();
         }
     };
@@ -1337,7 +1348,7 @@ containers.detail = function (model, container, module) {
 
         } else {
 
-            if(validation[model.name] != undefined) {
+            if (validation[model.name] != undefined) {
 
                 self.validation_params = validation[model.name];
 
@@ -1347,7 +1358,7 @@ containers.detail = function (model, container, module) {
             }
         }
 
-        if(!self.validation_params) {
+        if (!self.validation_params) {
             self.validation_params = {rules: {}, messages: {}};
         }
 
@@ -1375,7 +1386,7 @@ containers.detail = function (model, container, module) {
 
             field = model.fields[model.field_group.form[key]];
 
-            if(!field) {
+            if (!field) {
 
                 continue;
             }
@@ -1402,7 +1413,7 @@ containers.detail = function (model, container, module) {
 
             var field_element = false;
 
-            if(field.type == 'map') {
+            if (field.type == 'map') {
 
                 //field_element = buildFromTemplate(model, 'map_detail', field, field.key, field_key);
 
@@ -1442,7 +1453,7 @@ containers.detail = function (model, container, module) {
 
                 if (field.label !== false) {
 
-                    if($.trim(field.name) !== '') {
+                    if ($.trim(field.name) !== '') {
 
                         var label_element = buildFromTemplate(model, 'label', field);
 
@@ -1525,11 +1536,11 @@ containers.detail = function (model, container, module) {
             }
         }
 
-        if(self.tabs.length > 1) {
+        if (self.tabs.length > 1) {
 
             var tab_container = buildFromTemplate('', 'tabs');
 
-            for(var i in self.tabs) {
+            for (var i in self.tabs) {
 
                 var tab = self.tabs[i];
 
@@ -1636,11 +1647,11 @@ containers.detail = function (model, container, module) {
                 }
             }
 
-            if(widgets[field.type] !== undefined) {
+            if (widgets[field.type] !== undefined) {
 
                 self.widgets[i] = new widgets[field.type](element, field, model, module, 'detail');
 
-                if( self.widgets[i].initAfterShow === undefined ) {
+                if (self.widgets[i].initAfterShow === undefined) {
 
                     self.widgets[i].init();
                 }
@@ -1685,7 +1696,7 @@ containers.detail = function (model, container, module) {
                     if (module && module.inline) {
 
                         var listTmp = [];
-                        for(var k in response[model.name].inline[i]) {
+                        for (var k in response[model.name].inline[i]) {
                             listTmp.push(response[model.name].inline[i][k]);
                         }
 
@@ -1695,7 +1706,7 @@ containers.detail = function (model, container, module) {
 
                 } else {
 
-                    if( model.fields[i].type != 'map' ) {
+                    if (model.fields[i].type != 'map') {
 
                         element.html(response[model.name][i]);
 
@@ -1704,17 +1715,17 @@ containers.detail = function (model, container, module) {
 
                     }
 
-                    if(self.widgets[i] != undefined) {
-                        self.widgets[i].setValue( response[model.name][i], response[model.name] );
+                    if (self.widgets[i] != undefined) {
+                        self.widgets[i].setValue(response[model.name][i], response[model.name]);
                     }
                 }
             }
         }
     };
 
-    this.initAfterShow = function() {
+    this.initAfterShow = function () {
 
-        for(var i in self.widgets) {
+        for (var i in self.widgets) {
             self.widgets[i].init();
         }
     };
@@ -1824,7 +1835,7 @@ containers.grid = function (model, container, module) {
             var key = model.field_group.grid[i];
             var field = model.fields[key];
 
-            if( field && field.field && model.fields[field.field] ) {
+            if (field && field.field && model.fields[field.field]) {
 
                 field = model.fields[field.field];
             }
@@ -1835,7 +1846,7 @@ containers.grid = function (model, container, module) {
 
             header_th = buildFromTemplate(model, 'th');
 
-            if( field.sortable ) {
+            if (field.sortable) {
 
                 var sortContainer = buildFromTemplate('', 'sortable_container');
 
@@ -1849,22 +1860,22 @@ containers.grid = function (model, container, module) {
 
                 var sort_column = field.sort_column ? field.sort_column : module.model.phisical_table + '.' + field.key;
 
-                if(field.model) {
+                if (field.model) {
 
-                    sort_column = field.model.field_custom_name ? field.model.field_custom_name : field.model.phisical_table + '.' + field.model.field_name;
+                    sort_column = getModel(field.model).field_custom_name ? getModel(field.model).field_custom_name : getModel(field.model).phisical_table + '.' + getModel(field.model).field_name;
                 }
 
-                sortContainer.find('.title').attr('rel', sort_column );
+                sortContainer.find('.title').attr('rel', sort_column);
 
                 header_th.append(sortContainer);
 
-                sortContainer.on('click', '.title', function() {
+                sortContainer.on('click', '.title', function () {
 
                     self.data.sorting_column = $(this).attr('rel');
 
                     order = $(this).parent().find('.sort');
 
-                    if( order.hasClass('asc') ) {
+                    if (order.hasClass('asc')) {
 
                         order.removeClass('asc');
 
@@ -1874,7 +1885,7 @@ containers.grid = function (model, container, module) {
 
                         self.data.sorting_order = 'DESC';
 
-                    } else if ( order.hasClass('desc') ) {
+                    } else if (order.hasClass('desc')) {
 
                         order.removeClass('desc');
 
@@ -1903,7 +1914,7 @@ containers.grid = function (model, container, module) {
 
             self.header_row.append(header_th);
 
-            self.total_columns ++;
+            self.total_columns++;
         }
 
         if (container.grid.settings && container.grid.settings.actions) {
@@ -1913,7 +1924,7 @@ containers.grid = function (model, container, module) {
             header_th.text('');
             self.header_row.append(header_th);
 
-            self.total_columns ++;
+            self.total_columns++;
         }
 
         $(self.header).append(self.header_row);
@@ -1927,7 +1938,7 @@ containers.grid = function (model, container, module) {
 
         self.message = buildFromTemplate(model, 'message');
 
-        if( !$.isEmptyObject(model.pagination ) ) {
+        if (!$.isEmptyObject(model.pagination)) {
 
             self.tfoot = buildFromTemplate(model, 'tfoot');
             self.grid.append(self.tfoot);
@@ -1936,7 +1947,7 @@ containers.grid = function (model, container, module) {
 
             self.data.per_page = model.pagination.per_page;
 
-            model.pagination.onChange = function(page) {
+            model.pagination.onChange = function (page) {
 
                 self.data.current_page = page;
 
@@ -1957,11 +1968,11 @@ containers.grid = function (model, container, module) {
         return this;
     };
 
-    this.callbackAfterRefresh = function() {
+    this.callbackAfterRefresh = function () {
 
     };
 
-    this.callbackBeforeRefresh = function() {
+    this.callbackBeforeRefresh = function () {
 
     };
 
@@ -1969,7 +1980,7 @@ containers.grid = function (model, container, module) {
 
         var data = {};
 
-        if(self.pagination !== undefined) {
+        if (self.pagination !== undefined) {
             data = self.data;
         }
 
@@ -2022,8 +2033,7 @@ containers.grid = function (model, container, module) {
                 if (row[column])
                     switch (model.fields[column].type) {
 
-                        case 'email':
-                        {
+                        case 'email': {
 
                             var link = buildFromTemplate('', 'a');
                             link.attr('href', 'mailto:' + row[column]);
@@ -2034,21 +2044,20 @@ containers.grid = function (model, container, module) {
                             break;
                         }
                         case 'upload': {
-			var href = $('<a/>');
+                            var href = $('<a/>');
                             var link = $('<img/>');
                             link.attr('src', BASE_URL + '../helpers/timthumb.php?width=48&height=48&src=' + model.fields[column].settings.download + row[column]);
                             link.css('width', 100);
                             link.css('height', 'auto');
                             link.text(row[column]);
-			href.append(link);
-			href.attr('target', '_blank');
-			href.attr('href', model.fields[column].settings.download + row[column]);
+                            href.append(link);
+                            href.attr('target', '_blank');
+                            href.attr('href', model.fields[column].settings.download + row[column]);
                             td.append(href);
 
                             break;
                         }
-                        default:
-                        {
+                        default: {
 
                             td.html(row[column]);
                             break;
@@ -2070,14 +2079,14 @@ containers.grid = function (model, container, module) {
 
                     btn.attr('rel', row_id);
 
-                    if (action.type == 'view' ) {
+                    if (action.type == 'view') {
 
                         btn.text(action.text);
                         btn.on('click', self.actionButton);
 
                         td.append(btn);
 
-                    } else if (action.type == 'edit' && row.editable == true ) {
+                    } else if (action.type == 'edit' && row.editable == true) {
 
                         btn.text(lang('Edit'));
                         btn.on('click', self.actionButton);
@@ -2108,11 +2117,11 @@ containers.grid = function (model, container, module) {
                         btn.on('click', self.actionButton);
 
 
-                            if(row[action.type] === undefined) {
+                        if (row[action.type] === undefined) {
 
-                                self.actions[action.type] = action;
-                                td.append(btn);
-                            }
+                            self.actions[action.type] = action;
+                            td.append(btn);
+                        }
 
                     }
 
@@ -2125,20 +2134,20 @@ containers.grid = function (model, container, module) {
         }
     };
 
-    this.refreshWidgets = function(data) {
+    this.refreshWidgets = function (data) {
 
-        for(var i in self.widgets) {
+        for (var i in self.widgets) {
 
-           self.widgets[i].setValue(data);
+            self.widgets[i].setValue(data);
         }
     };
 
-    this.actionButton = function(event) {
+    this.actionButton = function (event) {
 
-        if($(this).attr('method') === 'GET') {
-            window.open( BASE_URL + $(this).attr('url') + '?' + decodeURI(module.containers.form.element.serialize()) );
+        if ($(this).attr('method') === 'GET') {
+            window.open(BASE_URL + $(this).attr('url') + '?' + decodeURI(module.containers.form.element.serialize()));
         } else {
-            self.actionRow( $(this).attr('action'), $(this).attr('rel'), $(this).attr('url'), $(this).attr('module'), $(this).attr('key') );
+            self.actionRow($(this).attr('action'), $(this).attr('rel'), $(this).attr('url'), $(this).attr('module'), $(this).attr('key'));
         }
     };
 
@@ -2151,7 +2160,7 @@ containers.grid = function (model, container, module) {
         }
 
         module.containers.form.element.show();
-        if(module.containers.detail)
+        if (module.containers.detail)
             module.containers.detail.element.hide();
 
         if (!url) {
@@ -2183,7 +2192,7 @@ containers.grid = function (model, container, module) {
 
                 resetForm(module.containers.form.element, module.containers.form);
 
-                module.containers.modal.element.find('.modal-header .title').text(lang('Edit') + ' ' +  lang(model.name));
+                module.containers.modal.element.find('.modal-header .title').text(lang('Edit') + ' ' + lang(model.name));
 
                 url = model.base_url + model.name + '/getEdit';
 
@@ -2207,7 +2216,7 @@ containers.grid = function (model, container, module) {
 
             } else if (type === 'add') {
 
-                if(self.actions[key]) {
+                if (self.actions[key]) {
 
                     url = self.actions[key].model.name + '/getNew';
 
@@ -2215,7 +2224,7 @@ containers.grid = function (model, container, module) {
                     var action = self.actions[key];
 
                     var moduleConfig = {
-                        model: action.model,
+                        model: getModel(action.model),
                         settings: [],
                         containers: {
                             modal: {},
@@ -2286,7 +2295,6 @@ containers.grid = function (model, container, module) {
 
         var data = {};
         data[model.table_id] = id;
-
 
 
         ajax({
@@ -2371,16 +2379,16 @@ containers.grid = function (model, container, module) {
 
                     var action = self.actions[key];
 
-                    if(action.default) {
+                    if (action.default) {
                         var value;
                         for (var i in action.default) {
                             value = action.default[i];
 
-                            if(value === 'row_id') {
+                            if (value === 'row_id') {
                                 value = id;
                             }
 
-                            self.moduleLoaded.containers.modal.element.find('#' + action.model.name + '_' + i).val( value );
+                            self.moduleLoaded.containers.modal.element.find('#' + getModel(action.model).name + '_' + i).val(value);
                         }
                     }
                 }
@@ -2504,7 +2512,7 @@ containers.inline = function (model, container, module, parentModule, parentKey,
             self.header_row.append(header_th);
         }
 
-        if(editable) {
+        if (editable) {
             header_th = buildFromTemplate(model, 'th');
             header_th.addClass('actions');
             header_th.text('');
@@ -2549,13 +2557,11 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 
                 td = buildFromTemplate(model, 'td');
 
-                if(model.fields[column])
-                {
+                if (model.fields[column]) {
 
                     switch (model.fields[column].type) {
 
-                        case 'email':
-                        {
+                        case 'email': {
 
                             var link = buildFromTemplate('', 'a');
                             link.attr('href', 'mailto:' + row[column]);
@@ -2565,8 +2571,7 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 
                             break;
                         }
-                        case 'upload':
-                        {
+                        case 'upload': {
 
                             var link = $('<img/>')
                             link.attr('src', BASE_URL + '../helpers/timthumb.php?width=48&height=48&src=' + model.fields[column].settings.download + row[column]);
@@ -2578,8 +2583,7 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 
                             break;
                         }
-                        default:
-                        {
+                        default: {
 
                             td.text(row[column]);
                             break;
@@ -2608,12 +2612,12 @@ containers.inline = function (model, container, module, parentModule, parentKey,
                 var field = model.fields[column];
 
                 if (field.type === "inline") {
-                    self.buildDepends(module.inline[column], field.model, model, column, td, parentModule.model.name + '[' + field_parent_id + ']' + '[' + i + ']');
-                } else if(field.type === "composite") {
+                    self.buildDepends(module.inline[column], getModel(field.model), model, column, td, parentModule.model.name + '[' + field_parent_id + ']' + '[' + i + ']');
+                } else if (field.type === "composite") {
 
                     field_id = model.fields[column].id ? model.fields[column].id : model.fields[column].key;
 
-                    for( var k in row[column] ) {
+                    for (var k in row[column]) {
 
                         field_element = buildFromTemplate(model, 'hidden', fieldParent, fieldParent.key);
                         field_element.removeAttr('id');
@@ -2625,9 +2629,9 @@ containers.inline = function (model, container, module, parentModule, parentKey,
                     }
                 } else {
 
-                        field_id = model.fields[column].id ? model.fields[column].id : model.fields[column].key;
+                    field_id = model.fields[column].id ? model.fields[column].id : model.fields[column].key;
 
-                    if( field_id !== undefined ) {
+                    if (field_id !== undefined) {
 
                         field_element = buildFromTemplate(model, 'hidden', fieldParent, fieldParent.key);
                         field_element.removeAttr('id');
@@ -2651,7 +2655,7 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 
             var btn;
 
-            if(editable) {
+            if (editable) {
                 if (row.id) {
                     btn = buildFromTemplate(model, 'button');
                     btn.text(lang('Edit'));
@@ -2704,9 +2708,9 @@ containers.inline = function (model, container, module, parentModule, parentKey,
         }
     };
 
-    this.actionButton = function(event) {
+    this.actionButton = function (event) {
 
-        self.actionRow( $(this).attr('action'), $(this).attr('rel'), $(this).attr('url'), $(this).attr('module') );
+        self.actionRow($(this).attr('action'), $(this).attr('rel'), $(this).attr('url'), $(this).attr('module'));
     };
 
     this.actionRow = function (type, id, url) {
@@ -2719,16 +2723,16 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 
         module.containers.form.element.find('.grid').show();
 
-        module.containers.modal.element.find('.modal-header .title').text(lang('New')+" "+ lang(model.name));
+        module.containers.modal.element.find('.modal-header .title').text(lang('New') + " " + lang(model.name));
 
         module.containers.modal.element.find('.modal-content').append(module.containers.form.element);
 
         if (type === 'new') {
 
-            module.containers.modal.element.find('.modal-header .title').text(lang('New')+" "+ lang(model.name));
+            module.containers.modal.element.find('.modal-header .title').text(lang('New') + " " + lang(model.name));
             module.containers.modal.element.scrollTop(0);
 
-            for(var key in module.containers.form.fields) {
+            for (var key in module.containers.form.fields) {
                 module.containers.form.fields[key].val('');
             }
 
@@ -2736,7 +2740,7 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 
             ajax({
                 url: BASE_URL + model.base_url + model.name + '/getNew',
-                success: function(result) {
+                success: function (result) {
                     module.containers.form.loadData(result);
                 }
             });
@@ -2748,26 +2752,26 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 
             module.containers.modal.element.css('z-index', modalIndex++);
 
-            module.containers.form.buttons.submit.unbind('click').on('click', function(){
+            module.containers.form.buttons.submit.unbind('click').on('click', function () {
 
-                if ( module.containers.form.element.valid() ) {
+                if (module.containers.form.element.valid()) {
 
                     var obj = {};
 
                     for (var i in module.containers.form.fields) {
 
-                        if(model.fields[i].type === 'composite') {
+                        if (model.fields[i].type === 'composite') {
 
                             obj[i] = [];
 
-                            module.containers.form.fields[i].find('option').each(function(){
+                            module.containers.form.fields[i].find('option').each(function () {
 
-                                if(this.selected === true) {
+                                if (this.selected === true) {
                                     obj[i].push(this.value);
                                 }
                             });
 
-                        } else if(model.fields[i].type === 'upload') {
+                        } else if (model.fields[i].type === 'upload') {
 
                             obj[i] = module.containers.form.fields[i][1].value;
 
@@ -2814,7 +2818,7 @@ containers.inline = function (model, container, module, parentModule, parentKey,
                 }
             });
 
-            module.containers.form.buttons.submit.unbind('click').on('click', function(){
+            module.containers.form.buttons.submit.unbind('click').on('click', function () {
 
                 if (module.containers.form.element.valid()) {
 
@@ -2825,14 +2829,14 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 
                             var obj = {};
 
-                            if( response.status === 'success' && response[model.name] ) {
+                            if (response.status === 'success' && response[model.name]) {
 
                                 var id = response[model.name].id;
-                                for(var index in self.list) {
+                                for (var index in self.list) {
 
-                                    if(self.list[index].id === id) {
+                                    if (self.list[index].id === id) {
 
-                                        for(var j in self.list[index]) {
+                                        for (var j in self.list[index]) {
                                             self.list[index][j] = response[model.name][j];
                                         }
 
@@ -2921,7 +2925,7 @@ containers.toolbar = function (model, container, module) {
 
                     btn.text(config.title);
 
-                    if(config.action)
+                    if (config.action)
                         btn.attr('action', config.action);
 
 
@@ -2935,7 +2939,7 @@ containers.toolbar = function (model, container, module) {
                         btn.attr('method', 'GET');
                         btn.on('click', self.actionButton);
 
-                    } else if(config.action === '') {
+                    } else if (config.action === '') {
                         btn.attr('onclick', config.onclick);
                     }
 
@@ -2960,19 +2964,19 @@ containers.toolbar = function (model, container, module) {
 
         self.form = buildFromTemplate(model, 'form');
         var contFields = 0;
-        for(var i in model.fields) {
+        for (var i in model.fields) {
 
             var field = model.fields[i];
 
-            if( field.filtrable ) {
+            if (field.filtrable) {
 
                 var field_element = buildFromTemplate(model, field.type, field, field.key);
 
-                if(field_element) {
+                if (field_element) {
 
                     try {
                         field_element.attr('name', model.name + '.' + field.key);
-                    } catch(error) {
+                    } catch (error) {
                     }
 
                     if (field.attr) {
@@ -2994,19 +2998,19 @@ containers.toolbar = function (model, container, module) {
                         field_element.on('change', self.loadDepends);
                     }
 
-                    contFields ++;
+                    contFields++;
                 }
             }
         }
 
-        if(contFields > 0) {
+        if (contFields > 0) {
 
             self.submit = buildFromTemplate(model, 'submit');
-            self.submit.val( lang('Filter') );
+            self.submit.val(lang('Filter'));
 
             self.form.append(self.submit);
 
-            self.submit.on('click', function(){
+            self.submit.on('click', function () {
 
                 var values = self.form.serializeArray();
 
@@ -3026,9 +3030,9 @@ containers.toolbar = function (model, container, module) {
 
             ajax({
                 url: BASE_URL + model.base_url + model.name + '/getNew',
-                success: function(response) {
+                success: function (response) {
 
-                    for(var i in self.fields) {
+                    for (var i in self.fields) {
 
                         var element = self.fields[i];
 
@@ -3037,7 +3041,7 @@ containers.toolbar = function (model, container, module) {
                             element.find('*').remove();
                             element.html('');
 
-                            if(response[model.name] != undefined && response[model.name].dropdown && response[model.name].dropdown[i]) {
+                            if (response[model.name] != undefined && response[model.name].dropdown && response[model.name].dropdown[i]) {
 
                                 for (var j in response[model.name].dropdown[i]) {
 
@@ -3067,10 +3071,10 @@ containers.toolbar = function (model, container, module) {
         return this;
     };
 
-    this.actionButton = function(event) {
+    this.actionButton = function (event) {
 
-        if($(this).attr('method') === 'GET') {
-            window.open( BASE_URL + $(this).attr('url') + '?' + decodeURI(self.form.serialize()) );
+        if ($(this).attr('method') === 'GET') {
+            window.open(BASE_URL + $(this).attr('url') + '?' + decodeURI(self.form.serialize()));
         } else {
         }
     };
@@ -3118,9 +3122,9 @@ containers.toolbar = function (model, container, module) {
 
                 if (element.is('input') || element.is('textarea')) {
 
-                    if(element.is('input:checkbox')) {
+                    if (element.is('input:checkbox')) {
                         element.val('1');
-                        if(response[model.name][i] == '1') {
+                        if (response[model.name][i] == '1') {
                             element.attr('checked', 'checked');
                         }
                     } else {
@@ -3129,8 +3133,8 @@ containers.toolbar = function (model, container, module) {
 
                     var field = model.fields[i];
 
-                    if(self.widgets[i] !== undefined) {
-                        self.widgets[i].setValue( response[model.name][i], response[model.name] );
+                    if (self.widgets[i] !== undefined) {
+                        self.widgets[i].setValue(response[model.name][i], response[model.name]);
                     }
 
                 } else if (model.fields[i].type == 'dropdown' || model.fields[i].type == 'multiple' || model.fields[i].type == 'composite') {
@@ -3159,7 +3163,7 @@ containers.toolbar = function (model, container, module) {
                     if (module && module.inline) {
 
                         var listTmp = [];
-                        for(var k in response[model.name].inline[i]) {
+                        for (var k in response[model.name].inline[i]) {
                             listTmp.push(response[model.name].inline[i][k]);
                         }
 
@@ -3167,9 +3171,9 @@ containers.toolbar = function (model, container, module) {
                         module.inline[i].containers.grid.refreshOnly();
                     }
 
-                } else if(self.widgets[i] != undefined) {
+                } else if (self.widgets[i] != undefined) {
 
-                    self.widgets[i].setValue( response[model.name][i], response[model.name] );
+                    self.widgets[i].setValue(response[model.name][i], response[model.name]);
                 }
             }
         }
@@ -3210,11 +3214,11 @@ var Module = function (module) {
 
 function initFormField(validation_params, field, element, settings) {
 
-    if(field.type === 'upload') {
+    if (field.type === 'upload') {
         element = $(element[1]);
     }
 
-    if(!element.hasClass('detail-field')) {
+    if (!element.hasClass('detail-field')) {
         // element.attr('id', settings.field_key);
         element.attr('name', settings.field_name);
     }
@@ -3288,7 +3292,7 @@ function buildFromTemplate(model, type, settings, id, field_id) {
 
                 if (model) {
 
-                    if(type == 'grid') {
+                    if (type == 'grid') {
                         element.addClass(model.name);
                     }
                 }
@@ -3309,13 +3313,13 @@ function lang(txt) {
 
 function resetForm(form, form_container) {
 
-    if(form.is('form'))
+    if (form.is('form'))
         form[0].reset();
 
-    if(form_container)
-    for(var i in form_container.widgets) {
-        form_container.widgets[i].reset();
-    }
+    if (form_container)
+        for (var i in form_container.widgets) {
+            form_container.widgets[i].reset();
+        }
 
     form.find('.help-inline').remove();
     form.find('.control-group').removeClass('success').removeClass('error');
@@ -3380,11 +3384,11 @@ var ModuleManager = function (modules) {
 
                 var sidebarRow;
 
-                if( !row.type ) {
+                if (!row.type) {
 
                     sidebarRow = buildFromTemplate('', 'sidebar_row');
 
-                } else if(row.type === 'menu') {
+                } else if (row.type === 'menu') {
 
                     sidebarRow = buildFromTemplate('', 'sidebar_menu');
                 }
@@ -3393,22 +3397,22 @@ var ModuleManager = function (modules) {
                 sidebarRow.attr('rel', row.module);
                 sidebarRow.find('.text').attr('rel', row.module).find('i').attr('rel', row.module);
 
-                if(row.url) {
+                if (row.url) {
                     sidebarRow.attr('url', row.url);
                     sidebarRow.find('.text').attr('url', row.url).find('i').attr('url', row.url);
-		    
-		    
+
+
                 }
-		
-		if( !row.type ) {
-			var rowIcon = buildFromTemplate('', 'sidebar_icon');
-	                sidebarRow.append(rowIcon);
-		}
-	                sidebarContainer.append(sidebarRow);
 
-	                sidebarRow.bind('click', self.onRowSeleted);
+                if (!row.type) {
+                    var rowIcon = buildFromTemplate('', 'sidebar_icon');
+                    sidebarRow.append(rowIcon);
+                }
+                sidebarContainer.append(sidebarRow);
 
-                
+                sidebarRow.bind('click', self.onRowSeleted);
+
+
             }
         }
 
@@ -3417,7 +3421,8 @@ var ModuleManager = function (modules) {
             // Callback after all is loaded
             frameworkInit();
 
-        } catch(error) {}
+        } catch (error) {
+        }
 
         return this;
     };
@@ -3440,7 +3445,7 @@ var ModuleManager = function (modules) {
 
         var url = itemSelected.attr('url');
 
-        if($.trim(url) === '') {
+        if ($.trim(url) === '') {
 
             moduleManager.modules[self.sidebar_current_module].containers.grid.show();
             moduleManager.modules[self.sidebar_current_module].containers.grid.external.hide();
@@ -3488,7 +3493,7 @@ function initInlineModules(module, settings) {
                 if (field.type === 'inline') {
 
                     var moduleInline = {
-                        model: field.model,
+                        model: getModel(field.model),
                         settings: {container: settings.container},
                         containers: {
                             form: {settings: {validation: 'default'}},
@@ -3500,7 +3505,7 @@ function initInlineModules(module, settings) {
                                     actions: [
                                         {
                                             type: 'button',
-                                            title: (lang('New')+" "+ lang(field.model.name)),
+                                            title: (lang('New') + " " + lang(getModel(field.model).name)),
                                             action: 'new'
                                         }
                                     ]
@@ -3509,10 +3514,10 @@ function initInlineModules(module, settings) {
                         }
                     };
 
-                    moduleInline.containers.form = new containers.form(field.model, moduleInline.containers, moduleInline, module, i).init();
-                    moduleInline.containers.modal = new containers.modal(field.model, moduleInline.containers, moduleInline, module, i).init();
-                    moduleInline.containers.grid = new containers.inline(field.model, moduleInline.containers, moduleInline, module, i).init();
-                    moduleInline.containers.toolbar = new containers.toolbar(field.model, moduleInline.containers, moduleInline, module, i).init();
+                    moduleInline.containers.form = new containers.form(getModel(field.model), moduleInline.containers, moduleInline, module, i).init();
+                    moduleInline.containers.modal = new containers.modal(getModel(field.model), moduleInline.containers, moduleInline, module, i).init();
+                    moduleInline.containers.grid = new containers.inline(getModel(field.model), moduleInline.containers, moduleInline, module, i).init();
+                    moduleInline.containers.toolbar = new containers.toolbar(getModel(field.model), moduleInline.containers, moduleInline, module, i).init();
 
                     module.containers.form.fields[i].append(moduleInline.containers.toolbar.element);
                     module.containers.form.fields[i].append(moduleInline.containers.grid.element);
@@ -3536,7 +3541,7 @@ function initInlineModules(module, settings) {
                 if (field.type === 'inline') {
 
                     var moduleInline = {
-                        model: field.model,
+                        model: getModel(field.model),
                         settings: {container: settings.container},
                         containers: {
                             form: {settings: {validation: 'default'}},
@@ -3544,18 +3549,17 @@ function initInlineModules(module, settings) {
                             modal: {},
                             grid: {
                                 settings: {
-                                    actions: [
-                                    ]
+                                    actions: []
                                 }
                             }
                         }
                     };
 
-                    moduleInline.containers.form = new containers.form(field.model, moduleInline.containers, moduleInline, module, i).init();
-                    moduleInline.containers.modal = new containers.modal(field.model, moduleInline.containers, moduleInline, module, i).init();
-                    moduleInline.containers.grid = new containers.inline(field.model, moduleInline.containers, moduleInline, module, i, false).init();
+                    moduleInline.containers.form = new containers.form(getModel(field.model), moduleInline.containers, moduleInline, module, i).init();
+                    moduleInline.containers.modal = new containers.modal(getModel(field.model), moduleInline.containers, moduleInline, module, i).init();
+                    moduleInline.containers.grid = new containers.inline(getModel(field.model), moduleInline.containers, moduleInline, module, i, false).init();
 
-                    //moduleInline.containers.toolbar = new containers.toolbar(field.model, moduleInline.containers, moduleInline, module, i).init();
+                    //moduleInline.containers.toolbar = new containers.toolbar(getModel(field.model), moduleInline.containers, moduleInline, module, i).init();
                     //module.containers.detail.fields[i].append(moduleInline.containers.toolbar.element);
                     //module.containers.detail.fields[i].append(moduleInline.containers.grid.element);
 
@@ -3574,3 +3578,21 @@ $(function () {
 
     moduleManager = new ModuleManager(modules).init();
 });
+
+
+function getModel(key) {
+
+    if (typeof key == 'string' && modules[key]) {
+
+        return modules[key].model;
+
+    } else if (typeof key == 'string') {
+
+        console.error(key + ' Does not exists in modules loaded');
+
+    } else {
+
+        console.error(key);
+        console.error('Passed as module');
+    }
+}
