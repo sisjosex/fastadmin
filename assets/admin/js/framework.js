@@ -1858,11 +1858,11 @@ containers.grid = function (model, container, module) {
                 sortContainer.append(text);
                 sortContainer.append(sortable);
 
-                var sort_column = field.sort_column ? field.sort_column : module.model.phisical_table + '.' + field.key;
+                var sort_column = field.sort_column ? field.sort_column : module.model.table_name + '.' + field.key;
 
                 if (field.model) {
 
-                    sort_column = getModel(field.model).field_custom_name ? getModel(field.model).field_custom_name : getModel(field.model).phisical_table + '.' + getModel(field.model).field_name;
+                    sort_column = getModel(field.model).field_custom_name ? getModel(field.model).field_custom_name : getModel(field.model).table_name + '.' + getModel(field.model).field_name;
                 }
 
                 sortContainer.find('.title').attr('rel', sort_column);

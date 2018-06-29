@@ -70,6 +70,7 @@ class Module extends Model
             'field_group' => $this->field_group,
             'name' => $this->name,
             'table_id' => $this->field_id,
+            'table_name' => $this->phisical_table,
             'field_name' => $this->field_name,
             'pagination' => $this->pagination,
             'base_url' => $this->base_url
@@ -168,10 +169,6 @@ class Module extends Model
 
             $field = $this->fields[$column];
 
-            if (isset($field['field'])) {
-                //$field = $this->fields[$field['field']];
-            }
-
             if (isset($field['operation'])) {
 
                 $columns_query[] = "" . $field['operation'] . " as " . $column;
@@ -190,8 +187,6 @@ class Module extends Model
                 }
 
                 $columns_query[] = $external_model->phisical_table . $relations[$external_model->phisical_table] . "." . $external_model->field_id . " as " . $external_model->phisical_table . $relations[$external_model->phisical_table] . "_id";
-
-                //$columns_query[] = ($external_model->field_custom_name ? $external_model->field_custom_name . ' as ' . $external_model->phisical_table . $relations[$external_model->phisical_table] : $external_model->phisical_table . $relations[$external_model->phisical_table] . "." . $external_model->field_name . " as " . $external_model->phisical_table . $relations[$external_model->phisical_table]);
 
                 $columns_query[] = $external_model->phisical_table . $relations[$external_model->phisical_table] . "." . ($external_model->field_custom_name ? $external_model->field_custom_name : $external_model->field_name) . " as " . $external_model->phisical_table . $relations[$external_model->phisical_table];
 
@@ -287,7 +282,6 @@ class Module extends Model
 
             $columns = $this->field_group['grid'];
         }
-        //$columns = array_keys($this->fields);
 
         $columns[] = $this->field_id;
 
@@ -302,11 +296,13 @@ class Module extends Model
             $joins = $this->joins;
         }
 
-        if (!$count_only) {
-            //$joins = $this->joins;
+        if (empty($this->sorting)) {
+            $this->sorting = [];
         }
 
-        //$joins = array();
+        if (@$_REQUEST['sorting_column']) {
+            $this->sorting = $this->sorting + array($_REQUEST['sorting_column'] => $_REQUEST['sorting_order']);
+        }
 
 
         foreach ($columns as $column) {
@@ -341,8 +337,6 @@ class Module extends Model
                 $columns_query[] = "`" . $external_model->phisical_table . $relations[$external_model->phisical_table] . "`.`" . $external_model->field_id . "` as " . $external_model->phisical_table . $relations[$external_model->phisical_table] . "_id";
 
                 $columns_query[] = "" . ($external_model->field_custom_name ? $external_model->field_custom_name . ' as ' . $external_model->phisical_table . $relations[$external_model->phisical_table] : $external_model->phisical_table . $relations[$external_model->phisical_table] . "." . $external_model->field_name . " as " . $external_model->phisical_table . $relations[$external_model->phisical_table]);
-
-                //$columns_query[] = $external_model->phisical_table . $relations[$external_model->phisical_table] . "." . $external_model->field_name . " as " . $external_model->phisical_table . $relations[$external_model->phisical_table];
 
                 $joins[] = (isset($field['relation_type']) ? $field['relation_type'] : 'LEFT') . " JOIN " .
                     $external_model->phisical_table . " " . $external_model->phisical_table . $relations[$external_model->phisical_table] .
@@ -526,7 +520,6 @@ class Module extends Model
     function loadDepends()
     {
         $key = $_REQUEST['key'];
-        //$id = $_REQUEST[$this->phisical_table][$this->field_id];
         $data = $_REQUEST[$this->phisical_table];
 
         $depending = $this->fields[$key]['key_depending'];
@@ -712,7 +705,6 @@ class Module extends Model
                                             LEFT JOIN
                                             `{$composite['relation_table']}` ON(`{$composite['relation_table']}`.`{$composite['external_column']}` = `{$external_model->phisical_table}`.`{$external_model->field_id}` AND   `{$composite['relation_table']}`.`{$composite['relation_column']}` = '0')
                                             LEFT JOIN `{$this->phisical_table}` ON (`{$this->phisical_table}`.`{$this->field_id}` = `{$composite['relation_table']}`.`{$composite['relation_column']}` )
-                                            /*WHERE `{$external_model->phisical_table}`.status != 'deleted'*/
 					    GROUP BY `{$external_model->phisical_table}`.`{$external_model->field_id}`
                                             ";
 
@@ -828,9 +820,6 @@ class Module extends Model
 
                                         $field_name = $external_model->field_custom_name_dropdown ? $external_model->field_custom_name_dropdown . ' as name ' : $external_model->phisical_table . '.' . $external_model->table_field . " as name ";
 
-                                        /*`{$external_model->phisical_table}`.`{$external_model->table_field}` as name,*/
-                                        /*`{$composite['relation_table']}` ON(`{$composite['relation_table']}`.`{$external_model->phisical_table}_{$external_model->field_id}` = `{$external_model->phisical_table}`.`{$external_model->field_id}` AND `{$composite['relation_table']}`.`{$this->phisical_table}_{$this->field_id}` = '$id')*/
-
                                         $joins = isset($composite['joins']) && !empty($composite['joins']) ? implode(' ', $composite['joins']) : '';
 
                                         $sql = "
@@ -843,7 +832,6 @@ class Module extends Model
                                                 LEFT JOIN
                                                 `{$composite['relation_table']}` ON(`{$composite['relation_table']}`.`{$composite['external_column']}` = `{$external_model->phisical_table}`.`{$external_model->field_id}` AND   `{$composite['relation_table']}`.`{$composite['relation_column']}` = '$id')
                                                 LEFT JOIN `{$this->phisical_table}` ON (`{$this->phisical_table}`.`{$this->field_id}` = `{$composite['relation_table']}`.`{$composite['relation_column']}` )
-                                                /*WHERE `{$external_model->phisical_table}`.status != 'deleted'*/
                                                 ";
 
                                         if (!empty($external_model->sorting)) {

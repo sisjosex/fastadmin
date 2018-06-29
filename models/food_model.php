@@ -138,6 +138,7 @@ class FoodModel extends Module
                 'attr' => array(
                     array('name' => 'placeholder', 'value' => lang('Nombre') )
                 ),
+                "sortable" => true,
                 'group' => 'column2',
                 "filtrable" => true,
             )
@@ -183,6 +184,7 @@ class FoodModel extends Module
                 'attr' => array(
                     array('name' => 'placeholder', 'value' => lang('Duración') )
                 ),
+                "sortable" => true,
                 'group' => 'column2',
                 "filtrable" => false
             )
