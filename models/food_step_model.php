@@ -36,6 +36,7 @@ class FoodStepModel extends Module
                 "key" => "name",
                 "name" => lang("Nombre"),
                 "type" => "text",
+                "sortable" => true,
                 'validation' => array(
                     'rules' => array(
                         'required' => false

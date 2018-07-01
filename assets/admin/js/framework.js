@@ -37,11 +37,12 @@ master_template.daterange = '<input type="text"/>';
 master_template.submit = '<input class="btn btn-primary btn-large btn-block" type="submit"/>';
 master_template.button = '<a class="btn btn-primary btn-large btn-block"/>';
 master_template.field = '<div class="control-group"/>';
+master_template.field_container = '<div class="control"/>';
 master_template.field_footer = '<div class="control-group center"/>';
 master_template.form = '<form autocomplete="off"></form>';
 master_template.detail = '<div class="detail"/>';
 master_template.detail_field = '<div class="detail-field"/>';
-master_template.modal = '<div class="modal">' +
+master_template.modal = '<div class="modal md-effect-1">' +
     '<div class="modal-box">' +
     '<div class="modal-container">' +
     '<div class="modal-border">' +
@@ -90,6 +91,8 @@ master_template.div = '<div/>';
 master_template.radio = '<div/>';
 master_template.checkbox = '<input type="checkbox">';
 master_template.pagination = '<div/>';
+master_template.backdrop = '<div class="modal-overlay"></div>';
+master_template.add_inline = '<i class="btn fa fa-icon fa-plus add-inline"></i>';
 
 var widgets = {};
 var containers = {};
@@ -903,7 +906,12 @@ containers.form = function (model, container, module) {
 
             } else {
 
-                field_container.append(field_element);
+                console.log('entro');
+
+                var field_ = buildFromTemplate('', 'field_container');
+                field_.append(field_element);
+
+                field_container.append(field_);
             }
 
             if (field.group) {
@@ -1091,7 +1099,7 @@ containers.form = function (model, container, module) {
 
                 if (field.type == 'dropdown') {
 
-                    var addInline = $('<i class="btn fa fa-icon fa-plus"></i>');
+                    var addInline = buildFromTemplate('', 'add_inline');
 
                     element.parent().append(addInline);
 
@@ -1776,7 +1784,7 @@ containers.grid = function (model, container, module) {
 
             resetForm(module.containers.form.element, module.containers.form);
 
-            module.containers.modal.element.hide();
+            // module.containers.modal.element.hide();
 
             module.containers.modal.element.find('.modal-content').append(module.containers.form.element);
 
@@ -1803,7 +1811,7 @@ containers.grid = function (model, container, module) {
 
         if (module.containers.detail && module.containers.modal) {
 
-            module.containers.modal.element.hide();
+            module.containers.modal.fadeOut();
 
             module.containers.modal.element.find('.modal-content').append(module.containers.detail.element);
 
@@ -2293,7 +2301,7 @@ containers.grid = function (model, container, module) {
 
             module.containers.modal.fadeIn(200);
             module.containers.modal.element.scrollTop(0);
-            module.containers.modal.element.css('z-index', modalIndex++);
+            // module.containers.modal.element.css('z-index', modalIndex++);
         }
 
         var data = {};
@@ -2447,7 +2455,7 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 
             resetForm(module.containers.form.element, module.containers.form);
 
-            module.containers.modal.element.hide();
+            // module.containers.modal.element.hide();
 
             module.containers.modal.element.find('.modal-content').append(module.containers.form.element);
 
@@ -2753,7 +2761,7 @@ containers.inline = function (model, container, module, parentModule, parentKey,
             module.containers.modal.element.scrollTop(0);
             $(window).scrollTop(0);
 
-            module.containers.modal.element.css('z-index', modalIndex++);
+            // module.containers.modal.element.css('z-index', modalIndex++);
 
             module.containers.form.buttons.submit.unbind('click').on('click', function () {
 
@@ -2806,7 +2814,7 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 
             module.containers.modal.fadeIn(200);
             module.containers.modal.element.scrollTop(0);
-            module.containers.modal.element.css('z-index', modalIndex++);
+            // module.containers.modal.element.css('z-index', modalIndex++);
 
             var data = {};
 
@@ -2882,24 +2890,39 @@ containers.inline = function (model, container, module, parentModule, parentKey,
 containers.modal = function (model, container, module) {
 
     this.element = buildFromTemplate(model, 'modal', container.settings);
+    this.modal_overlay = undefined;
 
     var self = this;
 
     this.init = function () {
+
+        if (this.modal_overlay == undefined) {
+
+            this.modal_overlay = buildFromTemplate('', 'backdrop');
+
+            // modalIndex = modalIndex + 2;
+
+            $('body').append(this.modal_overlay);
+        }
 
         return this;
     };
 
     this.fadeIn = function (milliseconds) {
 
-        self.element.css('display', 'block');
+        this.modal_overlay.css('z-index', modalIndex ++);
+        this.element.css('z-index', modalIndex ++);
+
+        // self.element.css('display', 'block');
         self.element.addClass('shown');
+        this.modal_overlay.addClass('shown');
     };
 
     this.fadeOut = function (milliseconds) {
 
         self.element.removeClass('shown');
-        self.element.css('display', 'none');
+        this.modal_overlay.removeClass('shown');
+        // self.element.css('display', 'none');
     };
 
     return this;
