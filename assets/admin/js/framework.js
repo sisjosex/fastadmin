@@ -328,7 +328,10 @@ widgets.upload = function (element, field, model, module) {
                                 $('#' + self.field_key).remove();
                             }
 
-                            $('#' + self.field_key).val(fileName);
+                            console.log(element);
+
+                            // $('#' + self.field_key).val(fileName);
+                            $(element).val(fileName);
                         }
                     });
 

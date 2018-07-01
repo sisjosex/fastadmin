@@ -48,33 +48,33 @@ class FoodModel extends Module
                 ),
                 'group' => 'column2',
                 "filtrable" => true,
-                'key_depending' => array('subcategory_id')
+//                'key_depending' => array('subcategory_id')
             )
         );
 
-        $this->addField(
-            array(
-                "key" => "subcategory_id",
-                "name" => lang("Sub-Categoria"),
-                "type" => "dropdown",
-                "model" => new SubcategoryModel(),
-                "default" => array(
-                    array("id" => '', 'name' => lang('Seleccione sub categoria') )
-                ),
-                "comparator" => "=",
-                'validation' => array(
-                    'rules' => array(
-                        'required' => true
-                    ),
-                    'messages' => array(
-                        'required' => lang('Sub-Categoria es requerido')
-                    )
-                ),
-                'group' => 'column2',
-                "filtrable" => true,
-                'depends_of' => 'category_id'
-            )
-        );
+//        $this->addField(
+//            array(
+//                "key" => "subcategory_id",
+//                "name" => lang("Sub-Categoria"),
+//                "type" => "dropdown",
+//                "model" => new SubcategoryModel(),
+//                "default" => array(
+//                    array("id" => '', 'name' => lang('Seleccione sub categoria') )
+//                ),
+//                "comparator" => "=",
+//                'validation' => array(
+//                    'rules' => array(
+//                        'required' => true
+//                    ),
+//                    'messages' => array(
+//                        'required' => lang('Sub-Categoria es requerido')
+//                    )
+//                ),
+//                'group' => 'column2',
+//                "filtrable" => true,
+//                'depends_of' => 'category_id'
+//            )
+//        );
 
         $this->addField(
             array(
